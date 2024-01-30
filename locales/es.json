@@ -1,0 +1,18 @@
+{
+  "Drawer": {
+    "DashboardScreen": "Tablero",
+    "SalesMockupScreen": "Maqueta de ventas",
+    "ImageGalleryScreen": "galería de imágenes",
+    "ChannelPresentationsScreen": "Presentaciones de canal",
+    "FreestyleScreen": "Estilo libre",
+    "TestimonialsScreen": "Testimonios",
+    "HelpScreen": "Ayudar",
+    "ActicityScreen": "Actualizaciones recientes"
+  },
+  "support": {
+    "or": "O"
+  },
+  "Support": {
+    "Frequently-Asked-Questions": "Preguntas frecuentes"
+  }
+}

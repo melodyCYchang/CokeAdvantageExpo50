@@ -1,0 +1,47 @@
+{
+  "cli": {
+    "version": ">= 7.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "base": {
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "image": "latest"
+      },
+      "channel": "base"
+    },
+    "development": {
+      "channel": "development",
+      "extends": "base",
+      "developmentClient": true,
+      "ios": {
+        "simulator": true
+      }
+    },
+    "production": {
+      "channel": "production",
+      "extends": "base"
+    },
+    "stage": {
+      "channel": "stage",
+      "extends": "base"
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {},
+      "ios": {
+        "appleTeamId": "75UNVA2TBC"
+      }
+    },
+    "stage": {
+      "android": {},
+      "ios": {
+        "appleTeamId": "75UNVA2TBC"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="Layer_2" viewBox="0 0 112.7 143">
+  <style>
+    .st1{fill:#56717a}.st3{fill:#fff}
+  </style>
+  <path fill="#c1c1c1" d="M112.7 143H0V0h84.5l28.2 27.8z"/>
+  <path d="M84.5 27.8h28.2L84.5 0z" class="st1"/>
+  <g>
+    <path fill="#44475a" d="M55.7 92.2L76 47l20.3 45.2 13.4 29.7v15.4H35.3z"/>
+    <path d="M3 137.3l12.9-27.1L35.7 69l19.8 41.2 13 27.1z" class="st1"/>
+    <path d="M35.7 69l8.7 18.2-5 10.5-4.2-8.7-4.1 8.7-4.6-9.5zM84.3 80.8l-3.5-7.9-5.2 11.5-4.9-11.1-3.3 7.5-3.3-7.3L76 47l11.7 26.1z" class="st3"/>
+    <circle cx="29.2" cy="38.4" r="10.2" class="st3"/>
+  </g>
+</svg>

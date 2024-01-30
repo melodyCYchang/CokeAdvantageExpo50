@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "273811678318",
+    "project_id": "swirecokeadvantage",
+    "storage_bucket": "swirecokeadvantage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:273811678318:android:7f314f74e0477e0e86727f",
+        "android_client_info": {
+          "package_name": "com.swirecc.swirecokeadvantage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "273811678318-ofilmrj5jqj1pidcmsh1gl3gd99p1hqc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaT-uZQf3LpB40LSTg-LceLgmtED3wOSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "273811678318-ofilmrj5jqj1pidcmsh1gl3gd99p1hqc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "273811678318-4pmlr60ulhhjmeeqo99vg08mu46me6gg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.swirecc.swirecokeadvantage"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

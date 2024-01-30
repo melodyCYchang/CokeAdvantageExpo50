@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="Layer_2" viewBox="0 0 110.5 140.2">
+  <style>
+    .st2{fill:#fff}
+  </style>
+  <path fill="#364e57" d="M110.5 140.2H0V0h82.9l27.6 27.3z"/>
+  <path fill="#56717a" d="M82.9 27.3h27.6L82.9 0z"/>
+  <path d="M9.4 10.3h20v18.5h-20zM45.4 10.3h20v18.5h-20z" class="st2"/>
+  <g>
+    <path d="M9.4 110.1h20v18.5h-20zM45.4 110.1h20v18.5h-20zM81.4 110.1h20v18.5h-20z" class="st2"/>
+  </g>
+  <path d="M41.1 50L70 69 41.1 88z" class="st2"/>
+</svg>

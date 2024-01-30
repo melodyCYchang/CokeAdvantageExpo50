@@ -1,0 +1,30 @@
+{
+  "Drawer": {
+    "DashboardScreen": "Dashboard",
+    "SalesMockupScreen": "Sales Mockup",
+    "ImageGalleryScreen": "Image Gallery",
+    "MaximizingProfitabilityScreen": "Maximizing Profitability",
+    "FreestyleProfitabilityScreen": "Freestyle Profitability",
+    "ReportsScreen": "Reports",
+    "ChannelPresentationsScreen": "Channel Presentations",
+    "FreestyleScreen": "Freestyle",
+    "TestimonialsScreen": "Testimonials",
+    "HelpScreen": "Help",
+    "ActicityScreen": "Recent Updates"
+  },
+  "Login": {
+    "InvalidLogin": "Invalid Login",
+    "email": "email",
+    "password": "password"
+  },
+  "error": {
+    "required": "Required",
+    "invalidEmail": "Invalid Email"
+  },
+  "support": {
+    "or": "OR"
+  },
+  "Support": {
+    "Frequently-Asked-Questions": "Frequently Asked Questions"
+  }
+}
