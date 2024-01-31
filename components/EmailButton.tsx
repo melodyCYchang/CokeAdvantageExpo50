@@ -1,20 +1,11 @@
-import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Alert,
-  Linking,
-} from 'react-native';
-import { format } from 'date-fns';
-import { MaterialIcons } from '@expo/vector-icons';
-import email from 'react-native-email';
-import * as MailComposer from 'expo-mail-composer';
-import { Colors } from '../theme';
-import { sendEmail } from '../utils/sendEmail';
-import { useDispatch, useSelector } from 'react-redux';
-import { downloadFile, getDownloads } from '../redux/downloads';
+import { MaterialIcons } from "@expo/vector-icons";
+import * as MailComposer from "expo-mail-composer";
+import React from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "~/redux/store";
+import { downloadFile, getDownloads } from "../redux/downloads";
+import { Colors } from "../theme";
 
 export default function EmailButton({
   subject,
@@ -27,7 +18,7 @@ export default function EmailButton({
   file: any;
   iconColor: any;
 }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const downloadedFiles: any = useSelector(getDownloads);
   const downloaded = downloadedFiles?.[file?.ID];
 
@@ -54,7 +45,7 @@ export default function EmailButton({
             }
 
             if (!downloadedFile.localFile) {
-              throw new Error('could not download file');
+              throw new Error("could not download file");
             }
             const a = await MailComposer.composeAsync({
               recipients: [], // array of email addresses
@@ -63,11 +54,11 @@ export default function EmailButton({
               attachments: [downloadedFile.localFile],
             });
             console.log(
-              '🚀 ~ file: EmailButton.tsx ~ line 51 ~ onPress={ ~ a',
-              a
+              "🚀 ~ file: EmailButton.tsx ~ line 51 ~ onPress={ ~ a",
+              a,
             );
           } catch (err) {
-            console.log('error', err.message);
+            console.log("error", err.message);
             // Alert(err.message);
           }
         }}
@@ -83,7 +74,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 35,
     height: 35,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

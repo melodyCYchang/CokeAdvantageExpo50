@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { t } from "i18n-js";
@@ -23,6 +23,7 @@ import { RootStackParamList } from "../navigation/RootStackParamList";
 import { setUser } from "../redux/user";
 import { ApplicationStyles, Colors, Fonts } from "../theme";
 
+import { useAppDispatch } from "~/redux/store";
 import backgroundImg from "../assets/img/bg.png";
 import { useStrapiLoginMutation } from "../services/wpApi";
 import validateApiResponse from "../utils/validateApiResponse";
@@ -49,7 +50,7 @@ type Props = {
 export default function LoginScreen({ navigation }: Props) {
   StatusBar.setBarStyle("light-content", true);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { email, password, rememberMe } = useSelector(getLogin);
 
   // let redirectUri = makeRedirectUri({

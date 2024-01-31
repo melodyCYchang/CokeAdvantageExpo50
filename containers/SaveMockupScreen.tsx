@@ -1,38 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 // import FormData from 'form-data';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp } from "@react-navigation/stack";
 import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  ImageBackground,
-  TextInput,
   ActivityIndicator,
+  Image,
+  ImageBackground,
   KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useAppDispatch } from "~/redux/store";
 
-import { Ionicons } from '@expo/vector-icons';
-import { Colors, Fonts } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import MiniButton from '../components/MiniButton';
+import { useSelector } from "react-redux";
 
-import imgBg from '../assets/img/squiggle-gray.png';
-import { getUser } from '../redux/user';
-import uploadMockupAsync from '../thunk/uploadMockupAsync';
-import DialogPopUp from '../components/DialogPopUp';
-import {
-  useDeleteMockupMutation,
-  useGetMockupsByUserQuery,
-  wpApi,
-} from '../services/wpApi';
+import { Ionicons } from "@expo/vector-icons";
+import MiniButton from "../components/MiniButton";
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { Colors, Fonts } from "../theme";
+
+import imgBg from "../assets/img/squiggle-gray.png";
+import DialogPopUp from "../components/DialogPopUp";
+import { getUser } from "../redux/user";
+import { useDeleteMockupMutation } from "../services/wpApi";
+import uploadMockupAsync from "../thunk/uploadMockupAsync";
 
 type SaveMockupScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'SaveMockupScreen'
+  "SaveMockupScreen"
 >;
 
 type Props = {
@@ -41,21 +38,21 @@ type Props = {
 };
 
 export default function SaveMockupScreen({ route, navigation }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const user = useSelector(getUser);
   const { imageUri, machines, mockup } = route.params;
   console.log(
-    '🚀 ~ file: SaveMockupScreen.tsx ~ line 45 ~ SaveMockupScreen ~ mockup',
-    mockup
+    "🚀 ~ file: SaveMockupScreen.tsx ~ line 45 ~ SaveMockupScreen ~ mockup",
+    mockup,
   );
   // console.log(
   //   '🚀 ~ file: SaveMockupScreen.tsx ~ line 43 ~ SaveMockupScreen ~ imageUri',
   //   imageUri
   // );
-  const [companyName, setCompanyName] = useState(mockup ? mockup.name : '');
+  const [companyName, setCompanyName] = useState(mockup ? mockup.name : "");
   console.log(
-    '🚀 ~ file: SaveMockupScreen.tsx ~ line 54 ~ SaveMockupScreen ~ companyName',
-    companyName
+    "🚀 ~ file: SaveMockupScreen.tsx ~ line 54 ~ SaveMockupScreen ~ companyName",
+    companyName,
   );
   const [redirectPopup, setRedirectPopup] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -64,7 +61,7 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
     if (mockup) {
       setCompanyName(mockup.name);
     } else {
-      setCompanyName('');
+      setCompanyName("");
     }
   }, [mockup, imageUri]);
 
@@ -87,11 +84,11 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
         setSaving(true);
         // Call Thunk
         const results = await dispatch(
-          uploadMockupAsync(user, mockup?.id, imageUri, companyName, machines)
+          uploadMockupAsync(user, mockup?.id, imageUri, companyName, machines),
         );
         console.log(
-          '🚀 ~ file: SaveMockupScreen.tsx ~ line 74 ~ handleSaveImage ~ results',
-          results
+          "🚀 ~ file: SaveMockupScreen.tsx ~ line 74 ~ handleSaveImage ~ results",
+          results,
         );
 
         // console.log(
@@ -198,7 +195,7 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
     <KeyboardAvoidingView
       style={{
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: "row",
         backgroundColor: Colors.white,
         // justifyContent: 'center',
         // alignItems: 'center',
@@ -207,33 +204,33 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
     >
       <View
         style={{
-          width: '50%',
-          height: '100%',
-          position: 'absolute',
+          width: "50%",
+          height: "100%",
+          position: "absolute",
           left: 0,
-          alignItems: 'flex-end',
-          justifyContent: 'center',
+          alignItems: "flex-end",
+          justifyContent: "center",
         }}
       >
         <Image
           source={{ uri: imageUri }}
-          style={{ width: '80%', height: '90%', marginRight: 20 }}
+          style={{ width: "80%", height: "90%", marginRight: 20 }}
           resizeMode="contain"
         />
       </View>
       <View
-        style={{ width: '50%', height: '100%', position: 'absolute', right: 0 }}
+        style={{ width: "50%", height: "100%", position: "absolute", right: 0 }}
       >
         <ImageBackground
           source={imgBg}
-          style={{ height: '100%' }}
+          style={{ height: "100%" }}
           resizeMode="stretch"
         >
           <View
             style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%',
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%",
             }}
           >
             <Text
@@ -241,7 +238,7 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
                 fontFamily: Fonts.type.base,
                 fontSize: 30,
                 color: Colors.white,
-                fontWeight: 'bold',
+                fontWeight: "bold",
               }}
             >
               SAVE IMAGE
@@ -251,10 +248,10 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
                 borderWidth: 1,
                 borderColor: Colors.white,
                 color: Colors.white,
-                width: '60%',
+                width: "60%",
                 padding: 10,
                 fontSize: 20,
-                textAlign: 'center',
+                textAlign: "center",
               }}
               onChangeText={setCompanyName}
               value={companyName}
@@ -279,17 +276,17 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
             />
             <TouchableOpacity
               style={{
-                position: 'absolute',
+                position: "absolute",
                 bottom: 0,
-                flexDirection: 'row',
+                flexDirection: "row",
                 padding: 20,
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '60%',
+                justifyContent: "center",
+                alignItems: "center",
+                width: "60%",
               }}
               onPress={() => {
                 if (!saving) {
-                  navigation.navigate('SalesMockupScreen', {
+                  navigation.navigate("SalesMockupScreen", {
                     clear: new Date().valueOf(),
                   });
                 }
@@ -302,7 +299,7 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
                   fontSize: 20,
                   color: Colors.white,
                   paddingLeft: 20,
-                  textAlign: 'center',
+                  textAlign: "center",
                 }}
               >
                 START OVER WITHOUT SAVING
@@ -320,16 +317,16 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
       >
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
           }}
         >
           <MiniButton
             onPress={() => {
               setRedirectPopup(false);
-              navigation.navigate('SalesMockupScreen', {
+              navigation.navigate("SalesMockupScreen", {
                 clear: new Date().valueOf(),
               });
             }}
@@ -340,7 +337,7 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
           <MiniButton
             onPress={() => {
               setRedirectPopup(false);
-              navigation.navigate('ImageGalleryScreen');
+              navigation.navigate("ImageGalleryScreen");
             }}
             text="VIEW GALLERY"
             textColor={Colors.swireRed}
@@ -351,15 +348,15 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
       {saving && (
         <View
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 0,
             left: 0,
             bottom: 0,
             right: 0,
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0,0,0,0.5)',
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.5)",
           }}
         >
           <ActivityIndicator size="large" color={Colors.swireRed} />
@@ -371,12 +368,12 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   bottomContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     backgroundColor: Colors.swireSuperDarkGray,
   },
   popuInput: {

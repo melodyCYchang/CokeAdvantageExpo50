@@ -1,43 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp } from "@react-navigation/stack";
+import * as Updates from "expo-updates";
+import { t } from "i18n-js";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import {
-  StyleSheet,
-  Text,
-  View,
+  ActivityIndicator,
+  Dimensions,
   Image,
   ImageBackground,
-  TouchableOpacity,
-  Dimensions,
   StatusBar,
-  ActivityIndicator,
-} from 'react-native';
-import * as Updates from 'expo-updates';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { t } from 'i18n-js';
-import { CheckBox } from 'react-native-elements';
-import { ApplicationStyles, Colors, Fonts } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { setUser } from '../redux/user';
-import ErrorBanner from '../components/ErrorBanner';
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { CheckBox } from "react-native-elements";
+import { useSelector } from "react-redux";
+import ErrorBanner from "../components/ErrorBanner";
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { setUser } from "../redux/user";
+import { ApplicationStyles, Colors, Fonts } from "../theme";
 
-import TextInputController from '../components/TextInputController';
-import { useLoginMutation } from '../services/wpApi';
-import { LoginPayload } from '../types/LoginPayload';
-import validateApiResponse from '../utils/validateApiResponse';
-import backgroundImg from '../assets/img/bg.png';
+import backgroundImg from "../assets/img/bg.png";
+import TextInputController from "../components/TextInputController";
+import { useLoginMutation } from "../services/wpApi";
+import { LoginPayload } from "../types/LoginPayload";
+import validateApiResponse from "../utils/validateApiResponse";
 
-import { isEmailRule } from '../utils/isEmailRule';
-import { getLogin, setPassword, setEmail, setRememberMe } from '../redux/login';
-import ForgotPasswordDialog from '../components/ForgotPasswordDialog';
-import getVersion from '../utils/getVersion';
-import swireLogo from '../assets/img/swire-coke-logo.png';
-import VersionText from '../components/VersionText';
-import loginAsync from '../redux/user/loginAsync';
+import { useAppDispatch } from "~/redux/store";
+import swireLogo from "../assets/img/swire-coke-logo.png";
+import VersionText from "../components/VersionText";
+import { getLogin, setRememberMe } from "../redux/login";
+import loginAsync from "../redux/user/loginAsync";
+import getVersion from "../utils/getVersion";
+import { isEmailRule } from "../utils/isEmailRule";
 
 type LoginWithPasswordScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'LoginWithPasswordScreen'
+  "LoginWithPasswordScreen"
 >;
 
 type Props = {
@@ -45,9 +45,9 @@ type Props = {
 };
 
 export default function LoginWithPasswordScreen({ navigation }: Props) {
-  StatusBar.setBarStyle('light-content', true);
+  StatusBar.setBarStyle("light-content", true);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { email, password, rememberMe } = useSelector(getLogin);
 
   React.useLayoutEffect(() => {
@@ -73,21 +73,21 @@ export default function LoginWithPasswordScreen({ navigation }: Props) {
 
   // console.log(errors);
 
-  const [errorText, setErrorText] = useState('');
+  const [errorText, setErrorText] = useState("");
   const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
   const [onboardingVisible, setOnboardingVisible] = useState(false);
-  const [dialogTitle, setDialogTitle] = useState('');
-  const [orientation, setOrientation] = useState('PORTRAIT');
+  const [dialogTitle, setDialogTitle] = useState("");
+  const [orientation, setOrientation] = useState("PORTRAIT");
   const [checkingForUpdate, setCheckingForUpdate] = useState(true);
 
   const determineAndSetOrientation = () => {
-    const { width } = Dimensions.get('window');
-    const { height } = Dimensions.get('window');
+    const { width } = Dimensions.get("window");
+    const { height } = Dimensions.get("window");
 
     if (width < height) {
-      setOrientation('PORTRAIT');
+      setOrientation("PORTRAIT");
     } else {
-      setOrientation('LANDSCAPE');
+      setOrientation("LANDSCAPE");
     }
   };
 
@@ -113,22 +113,22 @@ export default function LoginWithPasswordScreen({ navigation }: Props) {
 
   useEffect(() => {
     determineAndSetOrientation();
-    Dimensions.addEventListener('change', determineAndSetOrientation);
+    Dimensions.addEventListener("change", determineAndSetOrientation);
 
     return () => {
-      Dimensions.removeEventListener('change', determineAndSetOrientation);
+      Dimensions.removeEventListener("change", determineAndSetOrientation);
     };
   }, []);
 
   const onSubmit = async (values: LoginPayload) => {
     const { email, password } = values;
     try {
-      setErrorText('');
+      setErrorText("");
       const data: any = await dispatch(loginAsync(email, password));
       validateApiResponse(data);
       console.log(
-        '🚀 ~ file: OneButtonLoginScreen.tsx ~ line 110 ~ onSubmit ~ data',
-        data
+        "🚀 ~ file: OneButtonLoginScreen.tsx ~ line 110 ~ onSubmit ~ data",
+        data,
       );
 
       if (data?.data?.id) {
@@ -141,7 +141,7 @@ export default function LoginWithPasswordScreen({ navigation }: Props) {
         return dispatch(setUser(data.data));
       }
 
-      setErrorText('unknown error');
+      setErrorText("unknown error");
     } catch (err: any) {
       // console.error('login', err.message);
       setErrorText(err.message);
@@ -153,7 +153,7 @@ export default function LoginWithPasswordScreen({ navigation }: Props) {
       <View style={ApplicationStyles.mainContainer}>
         <ImageBackground
           source={backgroundImg}
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: "100%", height: "100%" }}
         >
           <View style={styles.container}>
             <ActivityIndicator size="large" />
@@ -166,18 +166,18 @@ export default function LoginWithPasswordScreen({ navigation }: Props) {
     <View style={ApplicationStyles.mainContainer}>
       <ImageBackground
         source={backgroundImg}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: "100%", height: "100%" }}
       >
         <View style={styles.container}>
           <View
             style={{
               borderColor: Colors.swireLightGray,
-              borderWidth: errorText === '' ? 0 : 6,
+              borderWidth: errorText === "" ? 0 : 6,
               backgroundColor: Colors.white,
-              width: '35%',
+              width: "35%",
             }}
           >
-            <ErrorBanner text={errorText} onClose={() => setErrorText('')} />
+            <ErrorBanner text={errorText} onClose={() => setErrorText("")} />
           </View>
           {(errors.email || errors.password) && (
             <View
@@ -185,19 +185,19 @@ export default function LoginWithPasswordScreen({ navigation }: Props) {
                 borderColor: Colors.swireLightGray,
                 borderWidth: 6,
                 backgroundColor: Colors.white,
-                width: '35%',
+                width: "35%",
                 padding: 10,
               }}
             >
               {errors.email && (
                 <Text style={styles.errorText}>
-                  {' '}
+                  {" "}
                   {`Email Field ${t(errors.email.message)}`}
                 </Text>
               )}
               {errors.password && (
                 <Text style={styles.errorText}>
-                  {' '}
+                  {" "}
                   {`Password Field ${t(errors.password.message)}`}
                 </Text>
               )}
@@ -217,7 +217,7 @@ export default function LoginWithPasswordScreen({ navigation }: Props) {
               autoCompleteType="email"
               autoCapitalize="none"
               // error={errors.email}
-              placeholder={t('Login.email')}
+              placeholder={t("Login.email")}
               disabled={busy}
               rules={isEmailRule}
               inputStyle={styles.input}
@@ -227,16 +227,16 @@ export default function LoginWithPasswordScreen({ navigation }: Props) {
               name="password"
               required
               password
-              placeholder={t('Login.password')}
+              placeholder={t("Login.password")}
               disabled={busy}
               inputStyle={styles.input}
             />
           </View>
           <View
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <CheckBox
@@ -262,9 +262,9 @@ export default function LoginWithPasswordScreen({ navigation }: Props) {
           </TouchableOpacity>
           <View
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
               margin: 10,
             }}
           >
@@ -274,7 +274,7 @@ export default function LoginWithPasswordScreen({ navigation }: Props) {
                 backgroundColor: Colors.swireSuperDarkGray,
               }}
               onPress={() => {
-                navigation.navigate('SignUpScreen');
+                navigation.navigate("SignUpScreen");
               }}
             >
               <Text style={styles.btnText}>CREATE ACCOUNT</Text>
@@ -292,7 +292,7 @@ export default function LoginWithPasswordScreen({ navigation }: Props) {
               <Text style={styles.btnText}>USER ONBOARDING</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ ...styles.btnTile, backgroundColor: 'gray' }}
+              style={{ ...styles.btnTile, backgroundColor: "gray" }}
               onPress={() => {
                 setForgotPasswordVisible(true);
               }}
@@ -309,7 +309,7 @@ export default function LoginWithPasswordScreen({ navigation }: Props) {
               marginTop: 15,
               width: 200,
               height: 40,
-              resizeMode: 'contain',
+              resizeMode: "contain",
             }}
           />
           <View style={{ marginTop: 5, marginBottom: 10 }}>
@@ -340,37 +340,37 @@ const styles = StyleSheet.create({
   textInput: {
     color: Colors.white,
     borderColor: Colors.white,
-    width: '35%',
+    width: "35%",
   },
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   loginBtn: {
     backgroundColor: Colors.white,
     width: 150,
     padding: 10,
     margin: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   errorText: {
     color: Colors.swireRed,
-    textAlign: 'center',
+    textAlign: "center",
     margin: 5,
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   btnText: {
     fontSize: 20,
     color: Colors.white,
-    textAlign: 'center',
+    textAlign: "center",
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.white,
     borderWidth: 3,
     color: Colors.white,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 20,
   },
   popuInput: {
@@ -409,10 +409,10 @@ const styles = StyleSheet.create({
   },
   footer: {
     backgroundColor: Colors.white,
-    width: '100%',
-    position: 'absolute',
+    width: "100%",
+    position: "absolute",
     bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

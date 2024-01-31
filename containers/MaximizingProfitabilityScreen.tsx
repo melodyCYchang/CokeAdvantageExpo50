@@ -1,14 +1,13 @@
-import React from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { StyleSheet, Text, View, StatusBar, Button } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { ApplicationStyles } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { resetUser } from '../redux/user';
+import { StackNavigationProp } from "@react-navigation/stack";
+import React from "react";
+import { Button, StatusBar, StyleSheet, Text, View } from "react-native";
+import { useAppDispatch } from "~/redux/store";
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { ApplicationStyles } from "../theme";
 
 type MaximizingProfitabilityScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'MaximizingProfitabilityScreen'
+  "MaximizingProfitabilityScreen"
 >;
 
 type Props = {
@@ -16,8 +15,8 @@ type Props = {
 };
 
 export default function MaximizingProfitabilityScreen({ navigation }: Props) {
-  StatusBar.setBarStyle('light-content', true);
-  const dispatch = useDispatch();
+  StatusBar.setBarStyle("light-content", true);
+  const dispatch = useAppDispatch();
   return (
     <View style={ApplicationStyles.mainContainer}>
       <View style={styles.container}>
@@ -36,8 +35,8 @@ export default function MaximizingProfitabilityScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
   },
 });

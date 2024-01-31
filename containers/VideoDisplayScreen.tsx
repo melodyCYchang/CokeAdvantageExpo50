@@ -1,55 +1,43 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AVPlaybackStatus, Video } from "expo-av";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  Animated,
+  Platform,
   StyleSheet,
   Text,
-  View,
-  StatusBar,
-  Button,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-  Animated,
-  TouchableWithoutFeedback,
   TextStyle,
-  TouchableNativeFeedbackProps,
-  TouchableOpacityProps,
   TouchableNativeFeedback,
-  Platform,
-} from 'react-native';
-import { Video, AVPlaybackStatus } from 'expo-av';
+  TouchableNativeFeedbackProps,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 
-import { MaterialIcons } from '@expo/vector-icons';
-import PDFReader from 'rn-pdf-reader-js';
-import Slider from '@react-native-community/slider';
+import { MaterialIcons } from "@expo/vector-icons";
+import Slider from "@react-native-community/slider";
 
-import { useDispatch } from 'react-redux';
-import { ApplicationStyles, Colors } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { resetUser } from '../redux/user';
-import FolderTile from '../components/FolderTile';
-import { useGetQuickLinksQuery } from '../services/wpApi';
-import { findQuicklinkByTermId } from '../utils/findQuicklinkByTermID';
-import FilesTile from '../components/GetFilesTile';
-import { getDownloadPath } from '../redux/downloads';
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { Colors } from "../theme";
 
 export enum ControlStates {
-  Visible = 'Visible',
-  Hidden = 'Hidden',
+  Visible = "Visible",
+  Hidden = "Hidden",
 }
 
 export enum PlaybackStates {
-  Loading = 'Loading',
-  Playing = 'Playing',
-  Paused = 'Paused',
-  Buffering = 'Buffering',
-  Error = 'Error',
-  Ended = 'Ended',
+  Loading = "Loading",
+  Playing = "Playing",
+  Paused = "Paused",
+  Buffering = "Buffering",
+  Error = "Error",
+  Ended = "Ended",
 }
 
 export enum ErrorSeverity {
-  Fatal = 'Fatal',
-  NonFatal = 'NonFatal',
+  Fatal = "Fatal",
+  NonFatal = "NonFatal",
 }
 
 export type ErrorType = {
@@ -75,16 +63,16 @@ export const getMinutesSecondsFromMilliseconds = (ms: number) => {
   const seconds = String(Math.floor(totalSeconds % 60));
   const minutes = String(Math.floor(totalSeconds / 60));
 
-  return minutes.padStart(1, '0') + ':' + seconds.padStart(2, '0');
+  return minutes.padStart(1, "0") + ":" + seconds.padStart(2, "0");
 };
 
 type ButtonProps = (TouchableNativeFeedbackProps | TouchableOpacityProps) & {
   children: React.ReactNode;
 };
 export const TouchableButton = (props: ButtonProps) =>
-  Platform.OS === 'android' ? (
+  Platform.OS === "android" ? (
     <TouchableNativeFeedback
-      background={TouchableNativeFeedback.Ripple('white', true)}
+      background={TouchableNativeFeedback.Ripple("white", true)}
       {...props}
     />
   ) : (
@@ -95,7 +83,7 @@ export const TouchableButton = (props: ButtonProps) =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const deepMerge = (
   target: { [x: string]: any },
-  source: { [x: string]: any }
+  source: { [x: string]: any },
 ) => {
   const result = { ...target, ...source };
   const keys = Object.keys(result);
@@ -103,7 +91,7 @@ export const deepMerge = (
   for (const key of keys) {
     const tprop = target[key];
     const sprop = source[key];
-    if (typeof tprop === 'object' && typeof sprop === 'object') {
+    if (typeof tprop === "object" && typeof sprop === "object") {
       result[key] = deepMerge(tprop, sprop);
     }
   }
@@ -114,49 +102,49 @@ export const styles = StyleSheet.create({
   errorWrapper: {
     ...StyleSheet.absoluteFillObject,
     paddingHorizontal: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   videoWrapper: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   iconWrapper: {
     borderRadius: 100,
-    overflow: 'hidden',
+    overflow: "hidden",
     padding: 10,
   },
   topInfoWrapper: {
-    position: 'absolute',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    position: "absolute",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     flex: 1,
     top: 0,
     left: 0,
     right: 0,
     padding: 2,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: "rgba(0,0,0,0.4)",
   },
   bottomInfoWrapper: {
-    position: 'absolute',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    position: "absolute",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     flex: 1,
     bottom: 0,
     left: 0,
     right: 0,
     padding: 2,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: "rgba(0,0,0,0.4)",
   },
-  timeLeft: { backgroundColor: 'transparent', marginLeft: 5 },
-  timeRight: { backgroundColor: 'transparent', marginRight: 5 },
+  timeLeft: { backgroundColor: "transparent", marginLeft: 5 },
+  timeRight: { backgroundColor: "transparent", marginRight: 5 },
   slider: { flex: 1, paddingHorizontal: 10 },
 });
 
 type VideoDisplayScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'VideoDisplayScreen'
+  "VideoDisplayScreen"
 >;
 
 type Props = {
@@ -175,7 +163,7 @@ export default function VideoDisplayScreen({ route, navigation }: Props) {
   let controlsTimer: NodeJS.Timeout | null = null;
   let initialShow = 1;
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [resize, setResize] = useState(Video.RESIZE_MODE_CONTAIN);
   const controlsOpacity = useRef(new Animated.Value(1)).current;
   const [controlsState, setControlsState] = useState(ControlStates.Visible);
@@ -298,10 +286,10 @@ export default function VideoDisplayScreen({ route, navigation }: Props) {
         state: status.didJustFinish
           ? PlaybackStates.Ended
           : status.isBuffering
-          ? PlaybackStates.Buffering
-          : status.shouldPlay
-          ? PlaybackStates.Playing
-          : PlaybackStates.Paused,
+            ? PlaybackStates.Buffering
+            : status.shouldPlay
+              ? PlaybackStates.Playing
+              : PlaybackStates.Paused,
       });
       if (
         (status.didJustFinish && controlsState === ControlStates.Hidden) ||
@@ -386,7 +374,7 @@ export default function VideoDisplayScreen({ route, navigation }: Props) {
       style={{
         flex: 1,
         backgroundColor: Colors.black,
-        maxWidth: '100%',
+        maxWidth: "100%",
       }}
     >
       <Video
@@ -412,8 +400,8 @@ export default function VideoDisplayScreen({ route, navigation }: Props) {
           style={{
             ...StyleSheet.absoluteFillObject,
             opacity: controlsOpacity,
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <View
@@ -424,7 +412,7 @@ export default function VideoDisplayScreen({ route, navigation }: Props) {
           />
           <View
             pointerEvents={
-              controlsState === ControlStates.Visible ? 'auto' : 'none'
+              controlsState === ControlStates.Visible ? "auto" : "none"
             }
           >
             <View style={styles.iconWrapper}>
@@ -512,8 +500,8 @@ export default function VideoDisplayScreen({ route, navigation }: Props) {
             <MaterialIcons
               name={
                 resize === Video.RESIZE_MODE_COVER
-                  ? 'fullscreen-exit'
-                  : 'fullscreen'
+                  ? "fullscreen-exit"
+                  : "fullscreen"
               }
               // style={props.icon.style}
               // size={props.icon.size! / 2}

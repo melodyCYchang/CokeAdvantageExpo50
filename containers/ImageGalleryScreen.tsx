@@ -1,32 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useDispatch, useSelector } from 'react-redux';
+import { StackNavigationProp } from "@react-navigation/stack";
+import * as Device from "expo-device";
+import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  Button,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicatorBase,
   ActivityIndicator,
   Dimensions,
-} from 'react-native';
-import { useForm } from 'react-hook-form';
-import * as Device from 'expo-device';
-import { ApplicationStyles, Colors, Fonts } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { getUser, resetUser } from '../redux/user';
-import tmpImg from '../assets/splash.png';
-import ImageTile from '../components/ImageTile';
-import { useGetMockupsByUserQuery } from '../services/wpApi';
-import { GetMockupsByUserPayload } from '../types/GetMockupsByUserPayload';
-import validateApiResponse from '../utils/validateApiResponse';
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "~/redux/store";
+import ImageTile from "../components/ImageTile";
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { getUser } from "../redux/user";
+import { useGetMockupsByUserQuery } from "../services/wpApi";
+import { ApplicationStyles, Colors, Fonts } from "../theme";
 
 type ImageGalleryScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'ImageGalleryScreen'
+  "ImageGalleryScreen"
 >;
 
 type Props = {
@@ -34,56 +29,56 @@ type Props = {
 };
 
 export default function ImageGalleryScreen({ navigation }: Props) {
-  StatusBar.setBarStyle('light-content', true);
+  StatusBar.setBarStyle("light-content", true);
   const user = useSelector(getUser);
 
-  const dispatch = useDispatch();
-  const [errorText, setErrorText] = useState('');
-  const [sortBy, setSortBy] = useState('created_at');
+  const dispatch = useAppDispatch();
+  const [errorText, setErrorText] = useState("");
+  const [sortBy, setSortBy] = useState("created_at");
   // const [mockups, setMarkups] = useState();
 
-  const [orientation, setOrientation] = useState('PORTRAIT');
-  const [landscapeWidth, setLandscapeWidth] = useState('25%');
-  const [portraitWidth, setPortraitWidth] = useState('33%');
+  const [orientation, setOrientation] = useState("PORTRAIT");
+  const [landscapeWidth, setLandscapeWidth] = useState("25%");
+  const [portraitWidth, setPortraitWidth] = useState("33%");
   const [isPhone, setIsPhone] = useState(false);
 
   const determineAndSetOrientation = () => {
-    const { width } = Dimensions.get('window');
-    const { height } = Dimensions.get('window');
+    const { width } = Dimensions.get("window");
+    const { height } = Dimensions.get("window");
 
     if (width < height) {
-      setOrientation('PORTRAIT');
+      setOrientation("PORTRAIT");
     } else {
-      setOrientation('LANDSCAPE');
+      setOrientation("LANDSCAPE");
     }
   };
 
   useEffect(() => {
     determineAndSetOrientation();
-    Dimensions.addEventListener('change', determineAndSetOrientation);
+    Dimensions.addEventListener("change", determineAndSetOrientation);
     Device.getDeviceTypeAsync().then((deviceType) => {
       if (deviceType === Device.DeviceType.PHONE) {
-        setLandscapeWidth('33%');
-        setPortraitWidth('50%');
+        setLandscapeWidth("33%");
+        setPortraitWidth("50%");
         setIsPhone(true);
       } else if (deviceType === Device.DeviceType.TABLET) {
-        setLandscapeWidth('25%');
-        setPortraitWidth('33%');
+        setLandscapeWidth("25%");
+        setPortraitWidth("33%");
         setIsPhone(false);
       }
     });
 
     return () => {
-      Dimensions.removeEventListener('change', determineAndSetOrientation);
+      Dimensions.removeEventListener("change", determineAndSetOrientation);
     };
   }, []);
 
-  const width = orientation === 'PORTRAIT' ? portraitWidth : landscapeWidth;
+  const width = orientation === "PORTRAIT" ? portraitWidth : landscapeWidth;
 
   const { data, error, isLoading } = useGetMockupsByUserQuery({
     ID: user?.strapiID,
     sort_by: sortBy,
-    order: sortBy === 'created_at' ? 'DESC' : 'ASC',
+    order: sortBy === "created_at" ? "DESC" : "ASC",
   });
   // console.log(
   //   '🚀 ~ file: ImageGalleryScreen.tsx ~ line 48 ~ ImageGalleryScreen ~ user?.id',
@@ -101,10 +96,10 @@ export default function ImageGalleryScreen({ navigation }: Props) {
         {isPhone ? (
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '100%',
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
               height: 90,
               backgroundColor: Colors.white,
             }}
@@ -121,7 +116,7 @@ export default function ImageGalleryScreen({ navigation }: Props) {
                 MY PHOTO GALLERY
               </Text>
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text
                 style={{
                   fontFamily: Fonts.type.base,
@@ -135,12 +130,12 @@ export default function ImageGalleryScreen({ navigation }: Props) {
               </Text>
               <TouchableOpacity
                 style={
-                  sortBy === 'created_at'
+                  sortBy === "created_at"
                     ? styles.sortBtnSelected
                     : styles.sortBtn
                 }
                 onPress={() => {
-                  setSortBy('created_at');
+                  setSortBy("created_at");
                 }}
               >
                 <Text
@@ -150,7 +145,7 @@ export default function ImageGalleryScreen({ navigation }: Props) {
                     paddingHorizontal: 15,
 
                     color:
-                      sortBy === 'created_at'
+                      sortBy === "created_at"
                         ? Colors.white
                         : Colors.swireDarkGray,
                   }}
@@ -160,11 +155,11 @@ export default function ImageGalleryScreen({ navigation }: Props) {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[
-                  sortBy === 'name' ? styles.sortBtnSelected : styles.sortBtn,
+                  sortBy === "name" ? styles.sortBtnSelected : styles.sortBtn,
                   { marginRight: 25 },
                 ]}
                 onPress={() => {
-                  setSortBy('name');
+                  setSortBy("name");
                 }}
               >
                 <Text
@@ -173,7 +168,7 @@ export default function ImageGalleryScreen({ navigation }: Props) {
                     fontSize: 10,
                     paddingHorizontal: 15,
                     color:
-                      sortBy === 'name' ? Colors.white : Colors.swireDarkGray,
+                      sortBy === "name" ? Colors.white : Colors.swireDarkGray,
                   }}
                 >
                   NAME
@@ -184,10 +179,10 @@ export default function ImageGalleryScreen({ navigation }: Props) {
         ) : (
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '100%',
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
               height: 90,
               backgroundColor: Colors.white,
             }}
@@ -204,7 +199,7 @@ export default function ImageGalleryScreen({ navigation }: Props) {
                 MY PHOTO GALLERY
               </Text>
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text
                 style={{
                   fontFamily: Fonts.type.base,
@@ -218,19 +213,19 @@ export default function ImageGalleryScreen({ navigation }: Props) {
               </Text>
               <TouchableOpacity
                 style={
-                  sortBy === 'created_at'
+                  sortBy === "created_at"
                     ? styles.sortBtnSelected
                     : styles.sortBtn
                 }
                 onPress={() => {
-                  setSortBy('created_at');
+                  setSortBy("created_at");
                 }}
               >
                 <Text
                   style={{
                     ...styles.sortText,
                     color:
-                      sortBy === 'created_at'
+                      sortBy === "created_at"
                         ? Colors.white
                         : Colors.swireDarkGray,
                   }}
@@ -240,18 +235,18 @@ export default function ImageGalleryScreen({ navigation }: Props) {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[
-                  sortBy === 'name' ? styles.sortBtnSelected : styles.sortBtn,
+                  sortBy === "name" ? styles.sortBtnSelected : styles.sortBtn,
                   { marginRight: 25 },
                 ]}
                 onPress={() => {
-                  setSortBy('name');
+                  setSortBy("name");
                 }}
               >
                 <Text
                   style={{
                     ...styles.sortText,
                     color:
-                      sortBy === 'name' ? Colors.white : Colors.swireDarkGray,
+                      sortBy === "name" ? Colors.white : Colors.swireDarkGray,
                   }}
                 >
                   NAME
@@ -263,14 +258,14 @@ export default function ImageGalleryScreen({ navigation }: Props) {
 
         {isLoading && (
           <View
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
             <ActivityIndicator size="large" />
           </View>
         )}
         {error && (
           <View
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
             <Text>{error?.message}</Text>
           </View>
@@ -294,20 +289,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: "center",
     // backgroundColor: 'white',
     backgroundColor: Colors.swireLightGray,
   },
   sortBtn: {
     borderColor: Colors.swireDarkGray,
     borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   sortBtnSelected: {
     backgroundColor: Colors.swireRed,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 2,
     borderColor: Colors.swireRed,
   },

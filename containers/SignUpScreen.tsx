@@ -1,41 +1,28 @@
-import React, { useState } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp } from "@react-navigation/stack";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import {
+  StatusBar,
   StyleSheet,
   Text,
-  View,
-  StatusBar,
-  Button,
-  ScrollView,
   TouchableOpacity,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import SvgUri from 'react-native-svg-uri';
-import { setAnalyticsCollectionEnabled } from 'expo-firebase-analytics';
-import { useForm } from 'react-hook-form';
-import { t } from 'i18n-js';
-import { ApplicationStyles, Colors, Fonts } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { resetUser } from '../redux/user';
-import FeatureTile from '../components/FeatureTile';
-import DashboardLibraryTile from '../components/DashboardLibraryTile';
-import { addCount, decCount, getCount, incCount } from '../redux/count';
-import {
-  useCreateAccountMutation,
-  useGetQuickLinksQuery,
-  useLoginMutation,
-} from '../services/wpApi';
-import TextInputController from '../components/TextInputController';
-import { LoginPayload } from '../types/LoginPayload';
-import { isEmailRule } from '../utils/isEmailRule';
-import DialogPopUp from '../components/DialogPopUp';
-import { CreateAccountPayload } from '../types/CreateAccountPayload';
-import validateApiResponse from '../utils/validateApiResponse';
-import ErrorDialog from '../components/ErrorDialog';
+  View,
+} from "react-native";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "~/redux/store";
+import ErrorDialog from "../components/ErrorDialog";
+import TextInputController from "../components/TextInputController";
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { getCount } from "../redux/count";
+import { useCreateAccountMutation } from "../services/wpApi";
+import { ApplicationStyles, Colors } from "../theme";
+import { CreateAccountPayload } from "../types/CreateAccountPayload";
+import { isEmailRule } from "../utils/isEmailRule";
+import validateApiResponse from "../utils/validateApiResponse";
 
 type DashboardScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'DashboardScreen'
+  "DashboardScreen"
 >;
 
 type Props = {
@@ -44,9 +31,9 @@ type Props = {
 
 export default function SignUpScreen({ navigation }: Props) {
   const count = useSelector(getCount);
-  StatusBar.setBarStyle('light-content', true);
-  const dispatch = useDispatch();
-  const [errorText, setErrorText] = useState('');
+  StatusBar.setBarStyle("light-content", true);
+  const dispatch = useAppDispatch();
+  const [errorText, setErrorText] = useState("");
 
   const [
     createAccount, // This is the mutation trigger
@@ -59,12 +46,12 @@ export default function SignUpScreen({ navigation }: Props) {
     formState: { errors },
   } = useForm<CreateAccountPayload>({
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      idNumber: '',
-      password: '',
-      rePassword: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      idNumber: "",
+      password: "",
+      rePassword: "",
     },
   });
 
@@ -72,7 +59,7 @@ export default function SignUpScreen({ navigation }: Props) {
     const { email, password, firstName, lastName, idNumber, rePassword } =
       values;
     try {
-      setErrorText('');
+      setErrorText("");
       const data: any = await createAccount({
         email,
         password,
@@ -89,9 +76,9 @@ export default function SignUpScreen({ navigation }: Props) {
         // return dispatch(setUser(data.data));
       }
 
-      setErrorText('unknown error');
+      setErrorText("unknown error");
     } catch (err) {
-      console.error('login', err.message);
+      console.error("login", err.message);
       setErrorText(err.message);
     }
   };
@@ -106,12 +93,12 @@ export default function SignUpScreen({ navigation }: Props) {
         </View>
         <View
           style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
+            flexDirection: "row",
+            flexWrap: "wrap",
             margin: 30,
-            width: '75%',
-            alignItems: 'center',
-            justifyContent: 'center',
+            width: "75%",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <View style={styles.inputView}>
@@ -204,7 +191,7 @@ export default function SignUpScreen({ navigation }: Props) {
       <ErrorDialog
         text={errorText}
         onClose={() => {
-          setErrorText('');
+          setErrorText("");
         }}
       />
     </View>
@@ -214,16 +201,16 @@ export default function SignUpScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     // justifyContent: 'center',
     backgroundColor: Colors.swireLightGray,
   },
   titleBanner: {
     backgroundColor: Colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     height: 100,
-    width: '100%',
+    width: "100%",
     // top: 0,
     // position: 'absolute',
   },
@@ -232,11 +219,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   inputView: {
-    width: '40%',
+    width: "40%",
     margin: 10,
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,

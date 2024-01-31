@@ -1,34 +1,15 @@
-import React from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
-import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  Button,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-import { useDispatch } from 'react-redux';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
-import { ApplicationStyles, Colors, Fonts } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { resetUser } from '../redux/user';
-import FolderTile from '../components/FolderTile';
-import {
-  useGetFreestyleFoldersQuery,
-  useGetQuickLinksQuery,
-  useGetTestimonialsQuery,
-} from '../services/wpApi';
-import { findQuicklinkByTermId } from '../utils/findQuicklinkByTermID';
-import FilesTile from '../components/GetFilesTile';
-import { findChildFoldersByTermID } from '../utils/findChildFoldersByTermID';
-import { findFoldersByTermID } from '../utils/findFolderByTermID';
-import TestimonialTile from '../components/TestimonialTile';
+import { StackNavigationProp } from "@react-navigation/stack";
+import React from "react";
+import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import { useAppDispatch } from "~/redux/store";
+import TestimonialTile from "../components/TestimonialTile";
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { useGetTestimonialsQuery } from "../services/wpApi";
+import { ApplicationStyles, Colors, Fonts } from "../theme";
 
 type TestimonialsScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'TestimonialsScreen'
+  "TestimonialsScreen"
 >;
 
 type Props = {
@@ -40,8 +21,8 @@ export default function TestimonialsScreen({ route, navigation }: Props) {
   const { folderObj, termID } = route.params;
   // console.log('folder: ', folderObj);
 
-  StatusBar.setBarStyle('light-content', true);
-  const dispatch = useDispatch();
+  StatusBar.setBarStyle("light-content", true);
+  const dispatch = useAppDispatch();
 
   // this query will be cache from the dashboard
   const {
@@ -50,8 +31,8 @@ export default function TestimonialsScreen({ route, navigation }: Props) {
     isLoading,
   } = useGetTestimonialsQuery();
   console.log(
-    '🚀 ~ file: TestimonialsScreen.tsx ~ line 52 ~ TestimonialsScreen ~ testimonials',
-    testimonials
+    "🚀 ~ file: TestimonialsScreen.tsx ~ line 52 ~ TestimonialsScreen ~ testimonials",
+    testimonials,
   );
 
   //   if (childFolders && !folders) {
@@ -63,11 +44,11 @@ export default function TestimonialsScreen({ route, navigation }: Props) {
       <View style={styles.container}>
         <View
           style={{
-            flexDirection: 'row',
-            backgroundColor: 'white',
-            width: '100%',
+            flexDirection: "row",
+            backgroundColor: "white",
+            width: "100%",
             height: 90,
-            alignItems: 'center',
+            alignItems: "center",
           }}
         >
           {/* <TouchableOpacity
@@ -130,30 +111,30 @@ const styles = StyleSheet.create({
     flex: 1,
     // alignItems: 'center',
     // justifyContent: 'center',
-    backgroundColor: 'white',
-    width: '100%',
+    backgroundColor: "white",
+    width: "100%",
   },
   scrollContainer: {
     flex: 1,
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
     // justifyContent: "space-between",
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     padding: 10,
   },
   tile: {
     margin: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
   tileText: {
-    alignItems: 'center',
+    alignItems: "center",
     margin: 10,
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -164,6 +145,6 @@ const styles = StyleSheet.create({
     elevation: 4,
 
     borderRadius: 1.0,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
 });

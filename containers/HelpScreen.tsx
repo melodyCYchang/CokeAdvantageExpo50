@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "~/redux/store";
 import { callNumber } from "../components/PhoneCall";
 import { RootStackParamList } from "../navigation/RootStackParamList";
 import { ApplicationStyles, Fonts } from "../theme";
@@ -26,7 +26,7 @@ type Props = {
 
 export default function HelpScreen({ navigation }: Props) {
   StatusBar.setBarStyle("light-content", true);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   return (
     <View style={ApplicationStyles.mainContainer}>
       <View style={styles.container}>

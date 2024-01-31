@@ -1,47 +1,26 @@
-import React, { useState } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
-import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  Image,
-  ImageBackground,
-  TouchableOpacity,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { t } from 'i18n-js';
-import { CheckBox, colors } from 'react-native-elements';
-import { ApplicationStyles, Colors, Metrics } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { setUser } from '../redux/user';
-import ErrorBanner from './ErrorBanner';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
+import { Colors } from "../theme";
 
-import TextInputController from './TextInputController';
-import { useForgotPasswordMutation, useLoginMutation } from '../services/wpApi';
-import { LoginPayload } from '../types/LoginPayload';
-import validateApiResponse from '../utils/validateApiResponse';
-import startupAsync from '../redux/user/startupAsync';
-import backgroundImg from '../assets/img/bg.jpg';
-import { isEmailRule } from '../utils/isEmailRule';
-import {
-  getLogin,
-  setPassword,
-  setEmail,
-  resetCred,
-  setRememberMe,
-} from '../redux/login';
-import DialogPopUp from './DialogPopUp';
-import { ForgotPasswordPayload } from '../types/ForgotPasswordPayload';
-import MiniButton from './MiniButton';
+import { useAppDispatch } from "~/redux/store";
+import { getLogin } from "../redux/login";
+import { useForgotPasswordMutation } from "../services/wpApi";
+import { ForgotPasswordPayload } from "../types/ForgotPasswordPayload";
+import { LoginPayload } from "../types/LoginPayload";
+import { isEmailRule } from "../utils/isEmailRule";
+import validateApiResponse from "../utils/validateApiResponse";
+import DialogPopUp from "./DialogPopUp";
+import MiniButton from "./MiniButton";
+import TextInputController from "./TextInputController";
 
 export default function ForgotPasswordDialog({
   onClose,
 }: {
   onClose: () => void;
 }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { email, password, rememberMe } = useSelector(getLogin);
 
   // const [
@@ -69,26 +48,26 @@ export default function ForgotPasswordDialog({
   // console.log(forgotPasswordErrors);
 
   // const [busy, setBusy] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [errorText, setErrorText] = useState("");
 
   const onSubmit = async (values: LoginPayload) => {
     const { email } = values;
     try {
-      setErrorText('');
+      setErrorText("");
       const data: any = await forgotPassword({ email });
       validateApiResponse(data);
 
       onClose();
     } catch (err) {
-      console.error('login', err.message);
+      console.error("login", err.message);
       setErrorText(err.message);
     }
   };
   return (
     <DialogPopUp title="Forgot Password" visibility setVisibility={onClose}>
-      {errorText !== '' && (
+      {errorText !== "" && (
         <Text
-          style={{ color: Colors.swireRed, fontSize: 20, fontWeight: 'bold' }}
+          style={{ color: Colors.swireRed, fontSize: 20, fontWeight: "bold" }}
         >
           {errorText}
         </Text>
@@ -115,10 +94,10 @@ export default function ForgotPasswordDialog({
       />
       <View
         style={{
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          width: '100%',
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          width: "100%",
         }}
       >
         <MiniButton
@@ -144,11 +123,11 @@ const styles = StyleSheet.create({
   textInput: {
     color: Colors.white,
     borderColor: Colors.white,
-    width: '35%',
+    width: "35%",
   },
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     flex: 1,
   },
   loginBtn: {
@@ -156,23 +135,23 @@ const styles = StyleSheet.create({
     width: 150,
     padding: 10,
     margin: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   errorText: {
     color: Colors.swireRed,
-    textAlign: 'center',
+    textAlign: "center",
     margin: 5,
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   btnText: {
     fontSize: 20,
     color: Colors.white,
-    textAlign: 'center',
+    textAlign: "center",
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -190,7 +169,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.white,
     borderWidth: 3,
     color: Colors.white,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 20,
   },
   popuInput: {

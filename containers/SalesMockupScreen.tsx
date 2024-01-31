@@ -1,31 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp } from "@react-navigation/stack";
+import React, { useEffect, useRef, useState } from "react";
 import {
-  StyleSheet,
-  View,
-  StatusBar,
+  Dimensions,
   Image,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  Dimensions,
-} from 'react-native';
-import { useDispatch } from 'react-redux';
-import * as ScreenOrientation from 'expo-screen-orientation';
+  View,
+} from "react-native";
+import { useAppDispatch } from "~/redux/store";
 
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import ViewShot, { captureRef } from 'react-native-view-shot';
-import * as ImagePicker from 'expo-image-picker';
-import { ApplicationStyles, Colors, Fonts } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import MiniButton from '../components/MiniButton';
-import TakePhoto from '../components/TakePhoto';
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import ViewShot, { captureRef } from "react-native-view-shot";
+import MiniButton from "../components/MiniButton";
+import TakePhoto from "../components/TakePhoto";
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { ApplicationStyles, Colors, Fonts } from "../theme";
 
-import MovableImage from '../components/MovableImage';
-import MachineSelectionPanel from '../components/MachineSelectionPanel';
-import { MachinePositioning } from '../types/MachinePositioning';
-import { useGetMockupByIDQuery } from '../services/wpApi';
-import { log } from 'react-native-reanimated';
-import { useFocusEffect } from '@react-navigation/core';
+import MachineSelectionPanel from "../components/MachineSelectionPanel";
+import MovableImage from "../components/MovableImage";
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -33,7 +27,7 @@ function sleep(ms) {
 
 type SalesMockupScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'SalesMockupScreen'
+  "SalesMockupScreen"
 >;
 
 type Props = {
@@ -43,8 +37,8 @@ type Props = {
 
 export default function SalesMockupScreen({ route, navigation }: Props) {
   console.log(
-    '🚀 ~ file: SalesMockupScreen.tsx ~ line 39 ~ SalesMockupScreen ~ route',
-    route
+    "🚀 ~ file: SalesMockupScreen.tsx ~ line 39 ~ SalesMockupScreen ~ route",
+    route,
   );
   const clear = route?.params?.clear;
   // console.log(
@@ -53,14 +47,14 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
   // );
   const mockup = route?.params?.mockup;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [photo, setPhoto] = useState<any>(null);
   const [takingPhoto, setTakingPhoto] = useState(false);
   const [machineUrls, setMachineUrls] = useState<Array<any>>([]);
   console.log(
-    '🚀 ~ file: SalesMockupScreen.tsx ~ line 56 ~ SalesMockupScreen ~ machineUrls',
-    machineUrls
+    "🚀 ~ file: SalesMockupScreen.tsx ~ line 56 ~ SalesMockupScreen ~ machineUrls",
+    machineUrls,
   );
   const [machinePanel, setMachinePanel] = useState(false);
 
@@ -118,10 +112,10 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
         //   '🚀 ~ file: SalesMockupScreen.tsx ~ line 60 ~ useEffect ~ mockup.machine_positioning',
         //   mockup
         // );
-        const jsonposition = JSON.parse(mockup.stickerPlacement || '{}');
+        const jsonposition = JSON.parse(mockup.stickerPlacement || "{}");
         console.log(
-          '🚀 ~ file: SalesMockupScreen.tsx ~ line 62 ~ useEffect ~ jsonposition',
-          jsonposition
+          "🚀 ~ file: SalesMockupScreen.tsx ~ line 62 ~ useEffect ~ jsonposition",
+          jsonposition,
         );
 
         // json position is array in an array so pull the first one out
@@ -129,7 +123,7 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
 
         // setMachineUrls(JSON.parse(mockup.machine_positioning));
       } catch (err) {
-        console.log('sales mockup not parse to json', err);
+        console.log("sales mockup not parse to json", err);
       }
     }
   }, [clear, mockup]);
@@ -167,7 +161,7 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
         {/* <StatusBar hidden /> */}
         <TakePhoto
           onSave={(data) => {
-            console.log('set photo:   ', data);
+            console.log("set photo:   ", data);
 
             setTakingPhoto(false);
             setPhoto(data);
@@ -200,8 +194,8 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
         style={{
           // borderColor: 'yellow',
           // borderWidth: 1,
-          height: '100%',
-          width: '100%',
+          height: "100%",
+          width: "100%",
         }}
       >
         {photo && (
@@ -215,8 +209,8 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
             // display: 'flex',
             // justifyContent: 'center',
             // alignItems: 'center',
-            position: 'relative',
-            top: -Dimensions.get('window').height / 2,
+            position: "relative",
+            top: -Dimensions.get("window").height / 2,
             // left: Dimensions.get('window').width / 2.5,
           }}
         >
@@ -226,10 +220,10 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
               // source={{ uri: machine.machine_uri }}
               source={machine}
               onPositionChange={(x: number, y: number) => {
-                console.log('onPositionChange: ', x, y);
+                console.log("onPositionChange: ", x, y);
                 machine.machine_left = x.toString();
                 machine.machine_top = y.toString();
-                console.log('sales mockup screen line 115 url: ', machineUrls);
+                console.log("sales mockup screen line 115 url: ", machineUrls);
               }}
               onScaleChange={(scale: number) => {
                 const width = Number(machine.machine_width) * scale;
@@ -237,13 +231,13 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
                 machine.machine_width = width.toString();
                 machine.machine_height = height.toString();
                 machine.machine_scale = scale.toString();
-                console.log('sales mockup screen line 127 url: ', machineUrls);
+                console.log("sales mockup screen line 127 url: ", machineUrls);
               }}
               onRotationChange={(rotation: number) => {
                 machine.machine_rotation = rotation.toString();
               }}
               onRemoveImage={() => {
-                console.log('remove me!');
+                console.log("remove me!");
                 const newMachineUrls = [...machineUrls];
                 newMachineUrls.splice(index, 1);
                 setMachineUrls(newMachineUrls);
@@ -271,19 +265,19 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
             onPress={() => {
               // onCaptureImage();
               captureRef(photoRef, {
-                format: 'png',
+                format: "png",
                 quality: 0.8,
               }).then(
                 (uri) => {
-                  console.log('Image saved to', uri);
-                  console.log('machine positions: ', machineUrls);
-                  navigation.navigate('SaveMockupScreen', {
+                  console.log("Image saved to", uri);
+                  console.log("machine positions: ", machineUrls);
+                  navigation.navigate("SaveMockupScreen", {
                     imageUri: uri,
                     machines: machineUrls,
                     mockup,
                   });
                 },
-                (error) => console.error('Oops, snapshot failed', error)
+                (error) => console.error("Oops, snapshot failed", error),
               );
             }}
           />
@@ -293,13 +287,13 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
       {photo && (
         <TouchableOpacity
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 0,
             right: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
+            backgroundColor: "rgba(0,0,0,0.5)",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
             margin: 5,
           }}
           onPress={() => setMachinePanel(!machinePanel)}
@@ -316,7 +310,7 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
           addToList={async (machines: any) => {
             const tmpArr = machineUrls;
             tmpArr.push(machines);
-            console.log('sales mockup screen line 173 url: ', tmpArr);
+            console.log("sales mockup screen line 173 url: ", tmpArr);
             setMachineUrls([...tmpArr]);
             // await sleep(1000);
             // tmpArr[tmpArr.length - 1].machine_top = -300;
@@ -333,13 +327,13 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
         <View
           style={{
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
             // borderWidth: 1,
             // borderColor: Colors.white,
-            width: '100%',
-            height: '100%',
-            position: 'absolute',
+            width: "100%",
+            height: "100%",
+            position: "absolute",
             top: 0,
           }}
         >
@@ -372,12 +366,12 @@ export default function SalesMockupScreen({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   bottomContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     backgroundColor: Colors.swireSuperDarkGray,
   },
 });

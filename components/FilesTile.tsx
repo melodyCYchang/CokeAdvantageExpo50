@@ -1,41 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import { useNavigation } from "@react-navigation/core";
+import React from "react";
 import {
+  Alert,
+  Dimensions,
+  Image,
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
-  Image,
-  Alert,
-  ActivityIndicator,
-  Linking,
-  Dimensions,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/core';
-import { Video, AVPlaybackStatus } from 'expo-av';
+  View,
+} from "react-native";
+import { useSelector } from "react-redux";
 
-import { MaterialIcons } from '@expo/vector-icons';
-import * as FileSystem from 'expo-file-system';
-import * as Device from 'expo-device';
-import { Colors, Fonts } from '../theme';
-import pdfLogo from '../assets/img/icon-quick-link-file.png';
-import vidLogo from '../assets/img/icon-quick-link-video.png';
-import DeleteButton from './DeleteButton';
-import EmailButton from './EmailButton';
-import DownloadButton from './DownloadButton';
+import { useAppDispatch } from "~/redux/store";
+import pdfLogo from "../assets/img/icon-quick-link-file.png";
+import vidLogo from "../assets/img/icon-quick-link-video.png";
 import {
-  useGetMeQuery,
-  useGetPresentationsByFolderQuery,
-} from '../services/wpApi';
-import {
+  deleteDownloadFile,
   downloadFile,
+  getConfirmDeleteId,
+  getDownloadId,
   getDownloading,
   getDownloads,
-  getConfirmDeleteId,
-  deleteDownloadFile,
-  getDownloadId,
-} from '../redux/downloads';
-import { getCanShowItems } from '../utils/getCanShowItems';
+} from "../redux/downloads";
+import { useGetMeQuery } from "../services/wpApi";
+import { Colors, Fonts } from "../theme";
+import { getCanShowItems } from "../utils/getCanShowItems";
+import DownloadButton from "./DownloadButton";
+import EmailButton from "./EmailButton";
 
 export default function FilesTile({
   files,
@@ -44,10 +35,10 @@ export default function FilesTile({
   files: any;
   width: any;
 }) {
-  const height = (Dimensions.get('window').width * parseFloat(width)) / 100;
+  const height = (Dimensions.get("window").width * parseFloat(width)) / 100;
 
   const navigation = useNavigation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const downloadedFiles: any = useSelector(getDownloads);
   // console.log(
   //   '🚀 ~ file: FilesTile.tsx ~ line 48 ~ downloadedFiles',
@@ -59,8 +50,8 @@ export default function FilesTile({
 
   const filteredFiles = getCanShowItems(
     files,
-    me?.email || '',
-    me?.location?.location
+    me?.email || "",
+    me?.location?.location,
   );
   // const filteredFiles = files.filter((ele: any) => {
   //   const datenow = new Date().setHours(0, 0, 0, 0);
@@ -102,24 +93,24 @@ export default function FilesTile({
     try {
       const downloadedFile = await dispatch(downloadFile(file));
       console.log(
-        '🚀 ~ file: FilesTile.tsx ~ line 59 ~ handleDownload ~ downloadedFile',
-        downloadedFile
+        "🚀 ~ file: FilesTile.tsx ~ line 59 ~ handleDownload ~ downloadedFile",
+        downloadedFile,
       );
 
       // if (file?.media.mime?.startsWith('video')) {
       //   navigation.navigate('VideoDisplayScreen', { file: downloadedFile });
       // } else
-      if (file?.media.mime?.startsWith('image')) {
-        navigation.navigate('ImageDisplayScreen', { file: downloadedFile });
+      if (file?.media.mime?.startsWith("image")) {
+        navigation.navigate("ImageDisplayScreen", { file: downloadedFile });
       } else {
-        navigation.navigate('MediaDisplayScreen', {
+        navigation.navigate("MediaDisplayScreen", {
           file: downloadedFile,
         });
       }
 
       // Linking.openURL(downloadedFile);
     } catch (err) {
-      console.log('error', err);
+      console.log("error", err);
       return false;
     }
   };
@@ -129,7 +120,7 @@ export default function FilesTile({
 
       // Linking.openURL(uri.uri);
     } catch (err) {
-      console.log('error', err);
+      console.log("error", err);
       return false;
     }
   };
@@ -147,8 +138,8 @@ export default function FilesTile({
                 // flexGrow: 1,
                 width,
                 height,
-                alignItems: 'center',
-                justifyContent: 'center',
+                alignItems: "center",
+                justifyContent: "center",
                 // borderWidth: 2,
               }}
             >
@@ -158,17 +149,17 @@ export default function FilesTile({
                   if (!downloaded) {
                     handleDownload(file);
                   } else if (file?.media?.mime) {
-                    if (file?.media?.mime?.startsWith('image')) {
-                      navigation.navigate('ImageDisplayScreen', {
+                    if (file?.media?.mime?.startsWith("image")) {
+                      navigation.navigate("ImageDisplayScreen", {
                         file: downloadedFiles?.[file.id],
                       });
                     } else {
                       console.log(
-                        '🚀 ~ file: FilesTile.tsx ~ line 132 ~ {files?.map ~ downloadedFiles?.[file.id]',
-                        downloadedFiles?.[file.id]
+                        "🚀 ~ file: FilesTile.tsx ~ line 132 ~ {files?.map ~ downloadedFiles?.[file.id]",
+                        downloadedFiles?.[file.id],
                       );
 
-                      navigation.navigate('MediaDisplayScreen', {
+                      navigation.navigate("MediaDisplayScreen", {
                         file: downloadedFiles?.[file.id],
                       });
                     }
@@ -182,31 +173,31 @@ export default function FilesTile({
                 onLongPress={() => {
                   if (downloaded) {
                     Alert.alert(
-                      'Delete Presentation Assets?',
-                      'Are you sure you want to delete this presentation? This will not delete the presentation from the server, only assets stored on your device.',
+                      "Delete Presentation Assets?",
+                      "Are you sure you want to delete this presentation? This will not delete the presentation from the server, only assets stored on your device.",
                       [
                         {
-                          text: 'Cancel',
-                          onPress: () => console.log('Cancel Pressed'),
-                          style: 'cancel',
+                          text: "Cancel",
+                          onPress: () => console.log("Cancel Pressed"),
+                          style: "cancel",
                         },
                         {
-                          text: 'Delete',
+                          text: "Delete",
                           onPress: () => {
                             handleDelete(file);
                           },
                         },
-                      ]
+                      ],
                     );
                   }
                 }}
               >
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: "row" }}>
                   <Image
                     source={
-                      !file?.media?.mime?.startsWith('video')
+                      !file?.media?.mime?.startsWith("video")
                         ? file.localFile ||
-                          file?.media?.mime?.startsWith('image')
+                          file?.media?.mime?.startsWith("image")
                           ? { uri: file.media.url }
                           : pdfLogo
                         : vidLogo
@@ -219,7 +210,7 @@ export default function FilesTile({
                     }}
                     resizeMode="contain"
                   />
-                  <View style={{ position: 'absolute', bottom: 0, right: -35 }}>
+                  <View style={{ position: "absolute", bottom: 0, right: -35 }}>
                     {/* <Text>Error: {isDownload}</Text> */}
                     <DownloadButton
                       isLoading={downloading[getDownloadId(file)]}
@@ -235,7 +226,7 @@ export default function FilesTile({
                 <View
                   style={{
                     width: 0,
-                    position: 'absolute',
+                    position: "absolute",
                     left: -10,
                     top: -10,
                   }}
@@ -261,31 +252,31 @@ const styles = StyleSheet.create({
   container: {
     // padding: 10,
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   scrollContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: "center",
+    justifyContent: "flex-start",
+    flexDirection: "row",
+    flexWrap: "wrap",
     paddingLeft: 7,
-    width: '100%',
+    width: "100%",
   },
   tile: {
     margin: 10,
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   tileText: {
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 10,
     marginHorizontal: 10,
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -296,6 +287,6 @@ const styles = StyleSheet.create({
     elevation: 4,
 
     borderRadius: 1.0,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
 });

@@ -1,32 +1,26 @@
-import React from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { Ionicons } from "@expo/vector-icons";
+import { StackNavigationProp } from "@react-navigation/stack";
+import React from "react";
 import {
+  ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
-  View,
-  StatusBar,
-  Button,
-  ScrollView,
   TouchableOpacity,
-} from 'react-native';
-import { useDispatch } from 'react-redux';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
-import { ApplicationStyles, Colors, Fonts } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { resetUser } from '../redux/user';
-import FolderTile from '../components/FolderTile';
-import {
-  useGetFreestyleFoldersQuery,
-  useGetQuickLinksQuery,
-} from '../services/wpApi';
-import { findQuicklinkByTermId } from '../utils/findQuicklinkByTermID';
-import FilesTile from '../components/GetFilesTile';
-import { findChildFoldersByTermID } from '../utils/findChildFoldersByTermID';
-import { findFoldersByTermID } from '../utils/findFolderByTermID';
+  View,
+} from "react-native";
+import { useAppDispatch } from "~/redux/store";
+import FolderTile from "../components/FolderTile";
+import FilesTile from "../components/GetFilesTile";
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { useGetFreestyleFoldersQuery } from "../services/wpApi";
+import { ApplicationStyles, Colors, Fonts } from "../theme";
+import { findChildFoldersByTermID } from "../utils/findChildFoldersByTermID";
+import { findFoldersByTermID } from "../utils/findFolderByTermID";
 
 type FreestyleScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'FreestyleScreen'
+  "FreestyleScreen"
 >;
 
 type Props = {
@@ -38,8 +32,8 @@ export default function FreestyleScreen({ route, navigation }: Props) {
   const { termID } = route.params;
   // console.log('folder: ', folderObj);
 
-  StatusBar.setBarStyle('light-content', true);
-  const dispatch = useDispatch();
+  StatusBar.setBarStyle("light-content", true);
+  const dispatch = useAppDispatch();
 
   // this query will be cache from the dashboard
   const {
@@ -64,7 +58,7 @@ export default function FreestyleScreen({ route, navigation }: Props) {
   //   );
 
   if (!childFolders && folders) {
-    navigation.navigate('DashboardScreen');
+    navigation.navigate("DashboardScreen");
   }
 
   return (
@@ -72,11 +66,11 @@ export default function FreestyleScreen({ route, navigation }: Props) {
       <View style={styles.container}>
         <View
           style={{
-            flexDirection: 'row',
-            backgroundColor: 'white',
-            width: '100%',
+            flexDirection: "row",
+            backgroundColor: "white",
+            width: "100%",
             height: 90,
-            alignItems: 'center',
+            alignItems: "center",
           }}
         >
           {/* <TouchableOpacity
@@ -120,7 +114,7 @@ export default function FreestyleScreen({ route, navigation }: Props) {
                   key={`folder_tile_${folder.term_id}`}
                   folder={folder}
                   onPress={() => {
-                    navigation.push('FreestyleScreen', {
+                    navigation.push("FreestyleScreen", {
                       termID: folder.term_id,
                     });
                   }}
@@ -139,30 +133,30 @@ const styles = StyleSheet.create({
     flex: 1,
     // alignItems: 'center',
     // justifyContent: 'center',
-    backgroundColor: 'white',
-    width: '100%',
+    backgroundColor: "white",
+    width: "100%",
   },
   scrollContainer: {
     flex: 1,
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
     // justifyContent: "space-between",
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     padding: 10,
   },
   tile: {
     margin: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
   tileText: {
-    alignItems: 'center',
+    alignItems: "center",
     margin: 10,
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -173,6 +167,6 @@ const styles = StyleSheet.create({
     elevation: 4,
 
     borderRadius: 1.0,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
 });

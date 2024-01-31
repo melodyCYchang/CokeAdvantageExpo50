@@ -1,38 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { Ionicons } from "@expo/vector-icons";
+import { DrawerActions } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import * as Device from "expo-device";
+import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  Button,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
   Dimensions,
   RefreshControl,
-} from 'react-native';
-import { useDispatch } from 'react-redux';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
-import { DrawerActions, StackActions } from '@react-navigation/native';
-import * as Device from 'expo-device';
-import { ApplicationStyles, Colors, Fonts } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { resetUser } from '../redux/user';
-import FolderTile from '../components/FolderTile';
-import {
-  useGetFolderStrapiQuery,
-  useGetMeQuery,
-  useGetQuickLinksQuery,
-} from '../services/wpApi';
-import { findQuicklinkByTermId } from '../utils/findQuicklinkByTermID';
-import GetFilesTile from '../components/GetFilesTile';
-import FilesTile from '../components/FilesTile';
-import { getCanShowItems } from '../utils/getCanShowItems';
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useAppDispatch } from "~/redux/store";
+import FilesTile from "../components/FilesTile";
+import FolderTile from "../components/FolderTile";
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { useGetFolderStrapiQuery, useGetMeQuery } from "../services/wpApi";
+import { ApplicationStyles, Colors, Fonts } from "../theme";
+import { getCanShowItems } from "../utils/getCanShowItems";
 
 type FolderScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'FolderScreen'
+  "FolderScreen"
 >;
 
 type Props = {
@@ -43,46 +34,49 @@ type Props = {
 export default function FolderScreen({ route, navigation }: Props) {
   const { folderName, termID } = route.params;
 
-  StatusBar.setBarStyle('light-content', true);
-  const dispatch = useDispatch();
+  StatusBar.setBarStyle("light-content", true);
+  const dispatch = useAppDispatch();
 
-  const [orientation, setOrientation] = useState('PORTRAIT');
-  const [landscapeWidth, setLandscapeWidth] = useState('25%');
-  const [portraitWidth, setPortraitWidth] = useState('33%');
+  const [orientation, setOrientation] = useState("PORTRAIT");
+  const [landscapeWidth, setLandscapeWidth] = useState("25%");
+  const [portraitWidth, setPortraitWidth] = useState("33%");
   const [isPhone, setIsPhone] = useState(false);
 
   const determineAndSetOrientation = () => {
-    const { width } = Dimensions.get('window');
-    const { height } = Dimensions.get('window');
+    const { width } = Dimensions.get("window");
+    const { height } = Dimensions.get("window");
 
     if (width < height) {
-      setOrientation('PORTRAIT');
+      setOrientation("PORTRAIT");
     } else {
-      setOrientation('LANDSCAPE');
+      setOrientation("LANDSCAPE");
     }
   };
 
   useEffect(() => {
     determineAndSetOrientation();
-    Dimensions.addEventListener('change', determineAndSetOrientation);
+    const orientationChanged = Dimensions.addEventListener(
+      "change",
+      determineAndSetOrientation,
+    );
     Device.getDeviceTypeAsync().then((deviceType) => {
       if (deviceType === Device.DeviceType.PHONE) {
-        setLandscapeWidth('33%');
-        setPortraitWidth('50%');
+        setLandscapeWidth("33%");
+        setPortraitWidth("50%");
         setIsPhone(true);
       } else if (deviceType === Device.DeviceType.TABLET) {
-        setLandscapeWidth('25%');
-        setPortraitWidth('33%');
+        setLandscapeWidth("25%");
+        setPortraitWidth("33%");
         setIsPhone(false);
       }
     });
 
     return () => {
-      Dimensions.removeEventListener('change', determineAndSetOrientation);
+      orientationChanged.remove();
     };
   }, []);
 
-  const width = orientation === 'PORTRAIT' ? portraitWidth : landscapeWidth;
+  const width = orientation === "PORTRAIT" ? portraitWidth : landscapeWidth;
 
   // this query will be cache from the dashboard
   const {
@@ -100,15 +94,15 @@ export default function FolderScreen({ route, navigation }: Props) {
   //   isFetching
   // );
   console.log(
-    '🚀 ~ file: FolderScreen.tsx ~ line 48 ~ FolderScreen ~ quickLink',
-    quickLink
+    "🚀 ~ file: FolderScreen.tsx ~ line 48 ~ FolderScreen ~ quickLink",
+    quickLink,
   );
   const { data: me } = useGetMeQuery();
 
   const folders = getCanShowItems(
     quickLink?.folders || [],
-    me?.email || '',
-    me?.location?.location
+    me?.email || "",
+    me?.location?.location,
   );
   // const folders = quickLink?.folders?.filter((ele: any) => {
   //   const datenow = new Date().setHours(0, 0, 0, 0);
@@ -149,12 +143,12 @@ export default function FolderScreen({ route, navigation }: Props) {
       <View style={styles.container}>
         <View
           style={{
-            flexDirection: 'row',
-            backgroundColor: 'white',
-            width: '100%',
+            flexDirection: "row",
+            backgroundColor: "white",
+            width: "100%",
             height: 90,
-            alignItems: 'center',
-            justifyContent: isPhone ? 'flex-end' : 'center',
+            alignItems: "center",
+            justifyContent: isPhone ? "flex-end" : "center",
           }}
         >
           <Text
@@ -162,8 +156,8 @@ export default function FolderScreen({ route, navigation }: Props) {
               fontFamily: Fonts.type.base,
               color: Colors.swireDarkGray,
               fontSize: 20,
-              textAlign: 'center',
-              width: '73%',
+              textAlign: "center",
+              width: "73%",
               margin: 5,
               paddingRight: 15,
             }}
@@ -172,7 +166,7 @@ export default function FolderScreen({ route, navigation }: Props) {
           </Text>
           <TouchableOpacity
             onPress={() => {
-              const jumpToAction = DrawerActions.jumpTo('DashboardScreen');
+              const jumpToAction = DrawerActions.jumpTo("DashboardScreen");
               navigation.dispatch(jumpToAction);
             }}
             style={{
@@ -180,7 +174,7 @@ export default function FolderScreen({ route, navigation }: Props) {
               paddingHorizontal: 15,
               paddingVertical: 10,
               margin: 20,
-              position: 'absolute',
+              position: "absolute",
               left: 0,
             }}
           >
@@ -229,7 +223,7 @@ export default function FolderScreen({ route, navigation }: Props) {
                     key={`folder_tile_${folder.id}`}
                     folder={folder}
                     onPress={() => {
-                      navigation.push('FolderScreen', {
+                      navigation.push("FolderScreen", {
                         termID: folder.id,
                         folderName: folder.name,
                       });
@@ -259,29 +253,29 @@ export default function FolderScreen({ route, navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    width: '100%',
+    backgroundColor: "white",
+    width: "100%",
   },
   scrollContainer: {
     flex: 1,
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: "flex-start",
+    flexDirection: "row",
+    flexWrap: "wrap",
     padding: 10,
   },
   tile: {
     margin: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
   tileText: {
-    alignItems: 'center',
+    alignItems: "center",
     margin: 10,
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -292,6 +286,6 @@ const styles = StyleSheet.create({
     elevation: 4,
 
     borderRadius: 1.0,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
 });

@@ -1,48 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Text,
-  View,
-  StatusBar,
-  AppState,
-  ActivityIndicator,
-  Platform,
-} from 'react-native';
-import { useDispatch } from 'react-redux';
-import * as Updates from 'expo-updates';
-import { useFonts } from 'expo-font';
-import * as ScreenOrientation from 'expo-screen-orientation';
+import { useFonts } from "expo-font";
+import * as Updates from "expo-updates";
+import React, { useEffect, useState } from "react";
+import { AppState, Platform } from "react-native";
 
-import DrawerNavigation from '../navigation/DrawerNavigation';
-import getVersion from '../utils/getVersion';
-import LoginLoading from '../components/LoginLoading';
-import startupAsync from '../redux/user/startupAsync';
-import { setUser } from '../redux/user';
-import loadActivitiesAsync from '../redux/user/loadActivitiesAsync';
+import { useAppDispatch } from "~/redux/store";
+import LoginLoading from "../components/LoginLoading";
+import DrawerNavigation from "../navigation/DrawerNavigation";
+import { setUser } from "../redux/user";
+import loadActivitiesAsync from "../redux/user/loadActivitiesAsync";
+import startupAsync from "../redux/user/startupAsync";
 // import startupAsync from '../redux/user/startupAsync';
 
-let appState = '';
+let appState = "";
 
 export default function RootContainer() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // const [appState, setAppState] = useState(AppState.currentState);
   const [initilized, setInitilized] = useState(false);
   // const [updating, setUpdating] = useState(false);
   const [fontsLoaded] = useFonts({
-    'Gotham-Light': require('../assets/fonts/gotham-light.ttf'),
-    'Gotham-Medium': require('../assets/fonts/gotham-medium.ttf'),
-    'Gotham-Bold': require('../assets/fonts/gotham-bold.ttf'),
+    "Gotham-Light": require("../assets/fonts/gotham-light.ttf"),
+    "Gotham-Medium": require("../assets/fonts/gotham-medium.ttf"),
+    "Gotham-Bold": require("../assets/fonts/gotham-bold.ttf"),
   });
 
   useEffect(() => {
-    if (Platform.OS !== 'web') {
+    if (Platform.OS !== "web") {
       // This will trigger when resuming the application
       const handleAppStateChange = async (nextAppState: any) => {
         if (
           appState.match(/inactive|background/) &&
-          nextAppState === 'active'
+          nextAppState === "active"
         ) {
-          console.log('App has come to the foreground.');
+          console.log("App has come to the foreground.");
           try {
             dispatch(loadActivitiesAsync());
           } catch (err: any) {
@@ -67,10 +58,10 @@ export default function RootContainer() {
         appState = nextAppState;
       };
 
-      AppState.addEventListener('change', handleAppStateChange);
+      AppState.addEventListener("change", handleAppStateChange);
 
       return () => {
-        AppState.removeEventListener('change', handleAppStateChange);
+        AppState.removeEventListener("change", handleAppStateChange);
       };
     }
   }, [appState]);
@@ -81,7 +72,7 @@ export default function RootContainer() {
         await dispatch(startupAsync());
         setInitilized(true);
       } catch (err: any) {
-        console.log('startupAsync error:', err.message);
+        console.log("startupAsync error:", err.message);
         dispatch(setUser(null));
         setInitilized(true);
       }

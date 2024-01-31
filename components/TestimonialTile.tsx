@@ -1,35 +1,28 @@
-import React from 'react';
+import { useNavigation } from "@react-navigation/core";
+import React from "react";
 import {
+  Alert,
+  Image,
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
-  Image,
-  Alert,
-  ActivityIndicator,
-  Linking,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/core';
-import { Video, AVPlaybackStatus } from 'expo-av';
+  View,
+} from "react-native";
+import { useSelector } from "react-redux";
 
-import { MaterialIcons } from '@expo/vector-icons';
-import * as FileSystem from 'expo-file-system';
-import { Colors, Fonts } from '../theme';
-import pdfLogo from '../assets/img/icon-quick-link-file.png';
-import vidLogo from '../assets/img/icon-quick-link-video.png';
-import DeleteButton from './DeleteButton';
-import EmailButton from './EmailButton';
-import DownloadButton from './DownloadButton';
-import { useGetPresentationsByFolderQuery } from '../services/wpApi';
+import { useAppDispatch } from "~/redux/store";
+import vidLogo from "../assets/img/icon-quick-link-video.png";
 import {
+  deleteDownloadFile,
   downloadFile,
+  getConfirmDeleteId,
+  getDownloadId,
   getDownloading,
   getDownloads,
-  getConfirmDeleteId,
-  deleteDownloadFile,
-  getDownloadId,
-} from '../redux/downloads';
+} from "../redux/downloads";
+import { Colors, Fonts } from "../theme";
+import DownloadButton from "./DownloadButton";
+import EmailButton from "./EmailButton";
 
 export default function TestimonialTile({
   testimonials,
@@ -37,7 +30,7 @@ export default function TestimonialTile({
   testimonials: any[];
 }) {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const downloadedFiles: any = useSelector(getDownloads);
   const confirmDeleteId: any = useSelector(getConfirmDeleteId);
   const downloading: any = useSelector(getDownloading);
@@ -46,19 +39,19 @@ export default function TestimonialTile({
     try {
       const downloadedFile = await dispatch(downloadFile(file));
       console.log(
-        '🚀 ~ file: FilesTile.tsx ~ line 59 ~ handleDownload ~ downloadedFile',
-        downloadedFile
+        "🚀 ~ file: FilesTile.tsx ~ line 59 ~ handleDownload ~ downloadedFile",
+        downloadedFile,
       );
 
       if (file.video) {
-        navigation.navigate('VideoDisplayScreen', { file: downloadedFile });
-      } else if (file?.mime_type?.startsWith('image')) {
-        navigation.navigate('ImageDisplayScreen', { file: downloadedFile });
+        navigation.navigate("VideoDisplayScreen", { file: downloadedFile });
+      } else if (file?.mime_type?.startsWith("image")) {
+        navigation.navigate("ImageDisplayScreen", { file: downloadedFile });
       }
 
       // Linking.openURL(downloadedFile);
     } catch (err) {
-      console.log('error', err);
+      console.log("error", err);
       return false;
     }
   };
@@ -68,7 +61,7 @@ export default function TestimonialTile({
 
       // Linking.openURL(uri.uri);
     } catch (err) {
-      console.log('error', err);
+      console.log("error", err);
       return false;
     }
   };
@@ -90,26 +83,26 @@ export default function TestimonialTile({
               onLongPress={() => {
                 if (downloaded) {
                   Alert.alert(
-                    'Delete Presentation Assets?',
-                    'Are you sure you want to delete this presentation? This will not delete the presentation from the server, only assets stored on your device.',
+                    "Delete Presentation Assets?",
+                    "Are you sure you want to delete this presentation? This will not delete the presentation from the server, only assets stored on your device.",
                     [
                       {
-                        text: 'Cancel',
-                        onPress: () => console.log('Cancel Pressed'),
-                        style: 'cancel',
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel",
                       },
                       {
-                        text: 'Delete',
+                        text: "Delete",
                         onPress: () => {
                           handleDelete(testimonial);
                         },
                       },
-                    ]
+                    ],
                   );
                 }
               }}
             >
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: "row" }}>
                 <Image
                   source={vidLogo}
                   style={{
@@ -120,7 +113,7 @@ export default function TestimonialTile({
                   }}
                   resizeMode="contain"
                 />
-                <View style={{ position: 'absolute', bottom: 0, right: -35 }}>
+                <View style={{ position: "absolute", bottom: 0, right: -35 }}>
                   {/* <Text>Error: {isDownload}</Text> */}
                   <DownloadButton
                     isLoading={downloading[getDownloadId(testimonial)]}
@@ -134,7 +127,7 @@ export default function TestimonialTile({
                 </Text>
               </View>
               <View
-                style={{ width: 0, position: 'absolute', left: -10, top: -10 }}
+                style={{ width: 0, position: "absolute", left: -10, top: -10 }}
               >
                 {/* <DeleteButton imgId={file.ID} /> */}
                 <EmailButton
@@ -162,30 +155,30 @@ export default function TestimonialTile({
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   scrollContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: "center",
+    justifyContent: "flex-start",
+    flexDirection: "row",
+    flexWrap: "wrap",
     paddingLeft: 7,
   },
   tile: {
     margin: 10,
     width: 225,
     height: 240,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   tileText: {
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 10,
     marginHorizontal: 10,
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -196,6 +189,6 @@ const styles = StyleSheet.create({
     elevation: 4,
 
     borderRadius: 1.0,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
 });

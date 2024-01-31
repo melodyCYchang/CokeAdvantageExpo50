@@ -16,7 +16,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 
 import * as Device from "expo-device";
-// import { SortableContainer, SortableGrid, SortableTile } from './drag-and-sort';
+import { SortableContainer, SortableGrid, SortableTile } from "./drag-and-sort";
 // import SortableGrid from 'react-native-sortable-grid';
 import AccountDetailsPanel from "../components/AccountDetailsPanel";
 import DashboardLibraryTile from "../components/DashboardLibraryTile";
