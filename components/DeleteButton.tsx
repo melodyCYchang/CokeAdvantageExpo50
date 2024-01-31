@@ -1,24 +1,16 @@
-import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Alert,
-  GestureResponderEvent,
-} from 'react-native';
-import { format } from 'date-fns';
-import { Feather } from '@expo/vector-icons';
-import { useForm } from 'react-hook-form';
-import { Colors } from '../theme';
-import { useDeleteMockupMutation } from '../services/wpApi';
-import { DeleteMockupPayload } from '../types/DeleteMockupPayload';
-import DialogPopUp from './DialogPopUp';
-import MiniButton from './MiniButton';
-import validateApiResponse from '../utils/validateApiResponse';
+import { Feather } from "@expo/vector-icons";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useDeleteMockupMutation } from "../services/wpApi";
+import { Colors } from "../theme";
+import { DeleteMockupPayload } from "../types/DeleteMockupPayload";
+import validateApiResponse from "../utils/validateApiResponse";
+import DialogPopUp from "./DialogPopUp";
+import MiniButton from "./MiniButton";
 
 export default function DeleteButton({ imgId }: any) {
-  const [errorText, setErrorText] = useState('');
+  const [errorText, setErrorText] = useState("");
   const [dialogVisibility, setDialogVisibility] = useState(false);
 
   const [
@@ -40,7 +32,7 @@ export default function DeleteButton({ imgId }: any) {
     const { post_id } = values;
 
     try {
-      setErrorText('');
+      setErrorText("");
       // console.log('id', post_id);
       // console.log('idID', postId);
       const data: any = await deleteMockup({
@@ -56,9 +48,9 @@ export default function DeleteButton({ imgId }: any) {
         // return dispatch(setUser(data.data));
       }
 
-      setErrorText('unknown error');
-    } catch (err) {
-      console.error('login', err.message);
+      setErrorText("unknown error");
+    } catch (err: any) {
+      console.error("login", err.message);
       setErrorText(err.message);
     }
   };
@@ -87,10 +79,10 @@ export default function DeleteButton({ imgId }: any) {
           </View>
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              width: '100%',
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              width: "100%",
             }}
           >
             <MiniButton
@@ -121,8 +113,8 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 35,
     height: 35,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: Colors.swireRed,
   },
 });

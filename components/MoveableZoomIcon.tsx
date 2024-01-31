@@ -1,22 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-underscore-dangle */
-import React, { useCallback, useRef, useState } from 'react';
-import { StyleSheet, View, StatusBar, Animated } from 'react-native';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useRef } from "react";
+import { Animated, StyleSheet } from "react-native";
 
 import {
   PanGestureHandler,
   PanGestureHandlerStateChangeEvent,
   PinchGestureHandler,
-  PinchGestureHandlerStateChangeEvent,
   RotationGestureHandler,
   RotationGestureHandlerStateChangeEvent,
   State,
-} from 'react-native-gesture-handler';
+} from "react-native-gesture-handler";
 
-import { FontAwesome5 } from '@expo/vector-icons';
-import { ApplicationStyles } from '../theme';
-import { USE_NATIVE_DRIVER } from '../config';
+import { USE_NATIVE_DRIVER } from "../config";
 
 export default function MoveableZoomIcon({ setZoom }: { setZoom: any }) {
   // Inital Values?
@@ -41,23 +37,23 @@ export default function MoveableZoomIcon({ setZoom }: { setZoom: any }) {
           },
         },
       ],
-      { useNativeDriver: USE_NATIVE_DRIVER }
+      { useNativeDriver: USE_NATIVE_DRIVER },
     ),
-    []
+    [],
   );
 
   /* Rotation */
   const _rotate = useRef(new Animated.Value(0)).current;
   const _rotateStr = _rotate.interpolate({
     inputRange: [-100, 100],
-    outputRange: ['-100rad', '100rad'],
+    outputRange: ["-100rad", "100rad"],
   });
   let _lastRotate = 0;
   const _onRotateGestureEvent = useCallback(
     Animated.event([{ nativeEvent: { rotation: _rotate } }], {
       useNativeDriver: USE_NATIVE_DRIVER,
     }),
-    []
+    [],
   );
 
   /* Pinching */
@@ -69,11 +65,11 @@ export default function MoveableZoomIcon({ setZoom }: { setZoom: any }) {
     Animated.event([{ nativeEvent: { scale: _pinchScale } }], {
       useNativeDriver: USE_NATIVE_DRIVER,
     }),
-    []
+    [],
   );
 
   const _onRotateHandlerStateChange = (
-    event: RotationGestureHandlerStateChangeEvent
+    event: RotationGestureHandlerStateChangeEvent,
   ) => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
       _lastRotate += event.nativeEvent.rotation;
@@ -100,8 +96,8 @@ export default function MoveableZoomIcon({ setZoom }: { setZoom: any }) {
     if (event.nativeEvent.oldState === State.ACTIVE) {
       const new_offset = _lastOffset.y + event.nativeEvent.translationY;
 
-      console.log('org offset: ', _lastOffset.y);
-      console.log('new_offset: ', new_offset);
+      console.log("org offset: ", _lastOffset.y);
+      console.log("new_offset: ", new_offset);
 
       if (_lastOffset.y <= 0 && _lastOffset.y >= -200) {
         if (_lastOffset.y + event.nativeEvent.translationY > 0) {
@@ -135,7 +131,7 @@ export default function MoveableZoomIcon({ setZoom }: { setZoom: any }) {
 
   const calculateZoom = (y: any) => {
     const zoomVal = (y * -1) / 200;
-    console.log('zoomVal : ', zoomVal);
+    console.log("zoomVal : ", zoomVal);
 
     return zoomVal;
   };
@@ -172,13 +168,13 @@ export default function MoveableZoomIcon({ setZoom }: { setZoom: any }) {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'black',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "black",
     width: 25,
     height: 25,
     borderRadius: 20,
-    borderColor: '#ccaf6a',
+    borderColor: "#ccaf6a",
     borderWidth: 2,
   },
   pinchableImage: {
@@ -188,7 +184,7 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: "white",
   },
   text: {
     fontSize: 16,

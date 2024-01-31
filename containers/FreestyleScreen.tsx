@@ -46,12 +46,12 @@ export default function FreestyleScreen({ route, navigation }: Props) {
   //     folders
   //   );
 
-  const childFolders = findChildFoldersByTermID(folders, termID);
+  const childFolders = findChildFoldersByTermID(termID, folders);
   //   console.log(
   //     '🚀 ~ file: ChannelPresentationsScreen.tsx ~ line 54 ~ childFolders',
   //     childFolders
   //   );
-  const currentFolder = findFoldersByTermID(folders, termID);
+  const currentFolder = findFoldersByTermID(termID, folders);
   //   console.log(
   //     '🚀 ~ file: ChannelPresentationsScreen.tsx ~ line 60 ~ currentFolder',
   //     currentFolder

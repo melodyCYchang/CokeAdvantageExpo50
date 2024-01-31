@@ -55,7 +55,10 @@ export default function ImageGalleryScreen({ navigation }: Props) {
 
   useEffect(() => {
     determineAndSetOrientation();
-    Dimensions.addEventListener("change", determineAndSetOrientation);
+    const orientationChange = Dimensions.addEventListener(
+      "change",
+      determineAndSetOrientation,
+    );
     Device.getDeviceTypeAsync().then((deviceType) => {
       if (deviceType === Device.DeviceType.PHONE) {
         setLandscapeWidth("33%");
@@ -69,7 +72,7 @@ export default function ImageGalleryScreen({ navigation }: Props) {
     });
 
     return () => {
-      Dimensions.removeEventListener("change", determineAndSetOrientation);
+      orientationChange.remove();
     };
   }, []);
 

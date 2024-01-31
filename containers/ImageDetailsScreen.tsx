@@ -1,33 +1,26 @@
-import React, { useState } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useDispatch } from 'react-redux';
+import { StackNavigationProp } from "@react-navigation/stack";
+import { format } from "date-fns";
+import * as FileSystem from "expo-file-system";
+import * as MailComposer from "expo-mail-composer";
+import React, { useState } from "react";
 import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
-  View,
-  StatusBar,
-  Button,
-  ScrollView,
-  Image,
   TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
-import { format, parse } from 'date-fns';
-import Mailer from 'react-native-mail';
-import * as MailComposer from 'expo-mail-composer';
-import * as FileSystem from 'expo-file-system';
-import { ApplicationStyles, Colors, Fonts } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { resetUser } from '../redux/user';
-import EditDetailsDialog from '../components/EditDetailsDialog';
-import { useGetMockupByIDQuery } from '../services/wpApi';
+  View,
+} from "react-native";
+import EditDetailsDialog from "../components/EditDetailsDialog";
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { useGetMockupByIDQuery } from "../services/wpApi";
+import { ApplicationStyles, Colors, Fonts } from "../theme";
 
 type ImageDetailsScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'ImageDetailsScreen'
+  "ImageDetailsScreen"
 >;
 
 type Props = {
@@ -37,14 +30,14 @@ type Props = {
 
 export default function ImageDetailsScreen({ route, navigation }: Props) {
   const { imageSource } = route.params;
-  StatusBar.setBarStyle('light-content', true);
+  StatusBar.setBarStyle("light-content", true);
 
   const [editDetailsVisible, setEditDetailsVisible] = useState(false);
 
   const { data, error, isLoading, isFetching, refetch } = useGetMockupByIDQuery(
     {
       id: imageSource?.id,
-    }
+    },
   );
 
   const aspectRatio = (width: any, height: any) => {
@@ -67,14 +60,14 @@ export default function ImageDetailsScreen({ route, navigation }: Props) {
   };
 
   const handleEmail = async (name: string, url: any, message: string) => {
-    console.log('sending email');
+    console.log("sending email");
     try {
-      const filename = url.split('/').pop();
-      console.log('fileName: ', filename);
+      const filename = url.split("/").pop();
+      console.log("fileName: ", filename);
 
       const uri = await FileSystem.downloadAsync(
         url,
-        `${FileSystem.cacheDirectory}${filename}`
+        `${FileSystem.cacheDirectory}${filename}`,
       );
 
       MailComposer.composeAsync({
@@ -84,7 +77,7 @@ export default function ImageDetailsScreen({ route, navigation }: Props) {
         attachments: [uri.uri],
       });
     } catch (err) {
-      console.log('error', err);
+      console.log("error", err);
     }
   };
 
@@ -99,8 +92,8 @@ export default function ImageDetailsScreen({ route, navigation }: Props) {
         <View
           style={{
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
             // backgroundColor: Colors.swireSuperDarkGray,
           }}
         >
@@ -123,9 +116,9 @@ export default function ImageDetailsScreen({ route, navigation }: Props) {
             <View
               style={[
                 {
-                  width: '75%',
+                  width: "75%",
                   // height: '100%',
-                  backgroundColor: 'white',
+                  backgroundColor: "white",
                   marginVertical: 20,
                   borderRadius: 5,
                 },
@@ -137,12 +130,12 @@ export default function ImageDetailsScreen({ route, navigation }: Props) {
                   uri: data?.image?.formats?.medium?.url,
                 }}
                 style={{
-                  width: '100%',
+                  width: "100%",
                   //   height: '100%',
-                  backgroundColor: 'red',
+                  backgroundColor: "red",
                   aspectRatio: aspectRatio(
                     data?.image?.formats?.thumbnail?.width,
-                    data?.image?.formats?.thumbnail?.height
+                    data?.image?.formats?.thumbnail?.height,
                   ),
                   //   borderRadius: 10,
                   borderTopLeftRadius: 5,
@@ -151,7 +144,7 @@ export default function ImageDetailsScreen({ route, navigation }: Props) {
                 // resizeMode="contain"
               />
               <View style={styles.detailsContainer}>
-                <View style={{ justifyContent: 'center', width: '25%' }}>
+                <View style={{ justifyContent: "center", width: "25%" }}>
                   <Text
                     style={{
                       color: Colors.swireRed,
@@ -172,19 +165,19 @@ export default function ImageDetailsScreen({ route, navigation }: Props) {
                   >
                     {format(
                       new Date(data?.created_at),
-                      'MMMM dd, yyyy'
+                      "MMMM dd, yyyy",
                     ).toUpperCase()}
                   </Text>
                 </View>
-                <View style={{ margin: 10, alignItems: 'flex-end' }}>
-                  <View style={{ flexDirection: 'row' }}>
+                <View style={{ margin: 10, alignItems: "flex-end" }}>
+                  <View style={{ flexDirection: "row" }}>
                     <TouchableOpacity
                       style={[
                         { backgroundColor: Colors.swireDarkGray, margin: 5 },
                         { ...styles.shadow, borderRadius: 1.0 },
                       ]}
                       onPress={() => {
-                        navigation.navigate('ImageGalleryScreen');
+                        navigation.navigate("ImageGalleryScreen");
                       }}
                     >
                       <Text style={styles.btnText}>BACK</Text>
@@ -201,14 +194,14 @@ export default function ImageDetailsScreen({ route, navigation }: Props) {
                       <Text style={styles.btnText}>EDIT DETAILS</Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: "row" }}>
                     <TouchableOpacity
                       style={[
                         { backgroundColor: Colors.swireDarkGray, margin: 5 },
                         { ...styles.shadow, borderRadius: 1.0 },
                       ]}
                       onPress={() => {
-                        navigation.navigate('SalesMockupScreen', {
+                        navigation.navigate("SalesMockupScreen", {
                           clear: new Date().valueOf(),
                           mockup: data,
                         });
@@ -225,7 +218,7 @@ export default function ImageDetailsScreen({ route, navigation }: Props) {
                         handleEmail(
                           data.name,
                           data?.image?.formats?.medium?.url,
-                          data.name
+                          data.name,
                         );
                       }}
                     >
@@ -252,7 +245,7 @@ export default function ImageDetailsScreen({ route, navigation }: Props) {
       )}
       {error && (
         <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <Text>{error?.message}</Text>
         </View>
@@ -264,14 +257,14 @@ export default function ImageDetailsScreen({ route, navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    alignItems: "center",
+    justifyContent: "flex-start",
     backgroundColor: Colors.swireLightGray,
   },
   detailsContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     // backgroundColor: Colors.white,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     padding: 10,
   },
   btnText: {
@@ -281,7 +274,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,

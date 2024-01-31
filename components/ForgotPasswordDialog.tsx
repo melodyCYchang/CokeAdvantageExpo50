@@ -8,7 +8,6 @@ import { useAppDispatch } from "~/redux/store";
 import { getLogin } from "../redux/login";
 import { useForgotPasswordMutation } from "../services/wpApi";
 import { ForgotPasswordPayload } from "../types/ForgotPasswordPayload";
-import { LoginPayload } from "../types/LoginPayload";
 import { isEmailRule } from "../utils/isEmailRule";
 import validateApiResponse from "../utils/validateApiResponse";
 import DialogPopUp from "./DialogPopUp";
@@ -50,7 +49,7 @@ export default function ForgotPasswordDialog({
   // const [busy, setBusy] = useState(false);
   const [errorText, setErrorText] = useState("");
 
-  const onSubmit = async (values: LoginPayload) => {
+  const onSubmit = async (values: ForgotPasswordPayload) => {
     const { email } = values;
     try {
       setErrorText("");
@@ -58,7 +57,7 @@ export default function ForgotPasswordDialog({
       validateApiResponse(data);
 
       onClose();
-    } catch (err) {
+    } catch (err: any) {
       console.error("login", err.message);
       setErrorText(err.message);
     }

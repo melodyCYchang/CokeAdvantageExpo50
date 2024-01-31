@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -16,7 +17,6 @@ import { RootStackParamList } from "../navigation/RootStackParamList";
 import { useGetPresentationFoldersQuery } from "../services/wpApi";
 import { ApplicationStyles, Colors, Fonts } from "../theme";
 import { findChildFoldersByTermID } from "../utils/findChildFoldersByTermID";
-import { findFoldersByTermID } from "../utils/findFolderByTermID";
 
 type ChannelPresentationsScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -49,12 +49,21 @@ export default function ChannelPresentationsScreen({
   //     folders
   //   );
 
-  const childFolders = findChildFoldersByTermID(folders, termID);
+  if (isLoading) {
+    return (
+      <View style={ApplicationStyles.mainContainer}>
+        <View style={styles.container}>
+          <ActivityIndicator size="large" />
+        </View>
+      </View>
+    );
+  }
+  const childFolders = findChildFoldersByTermID(termID, folders);
   //   console.log(
   //     '🚀 ~ file: ChannelPresentationsScreen.tsx ~ line 54 ~ childFolders',
   //     childFolders
   //   );
-  const currentFolder = findFoldersByTermID(folders, termID);
+  const currentFolder = findChildFoldersByTermID(termID, folders);
   //   console.log(
   //     '🚀 ~ file: ChannelPresentationsScreen.tsx ~ line 60 ~ currentFolder',
   //     currentFolder

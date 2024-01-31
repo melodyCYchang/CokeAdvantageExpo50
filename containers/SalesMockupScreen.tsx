@@ -21,7 +21,7 @@ import { ApplicationStyles, Colors, Fonts } from "../theme";
 import MachineSelectionPanel from "../components/MachineSelectionPanel";
 import MovableImage from "../components/MovableImage";
 
-function sleep(ms) {
+function sleep(ms: number | undefined) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 

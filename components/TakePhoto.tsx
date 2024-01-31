@@ -1,29 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
-import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  Button,
-  Image,
-  TouchableOpacity,
-  Animated,
-} from 'react-native';
-import { useDispatch } from 'react-redux';
-import { Camera } from 'expo-camera';
+import { Camera, CameraType, FlashMode } from "expo-camera";
+import React, { useEffect, useRef, useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import {
-  SimpleLineIcons,
-  Ionicons,
-  Feather,
-  FontAwesome5,
-} from '@expo/vector-icons';
-import Slider from '@react-native-community/slider';
-import { ApplicationStyles, Colors } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { resetUser } from '../redux/user';
-import MoveableZoomIcon from './MoveableZoomIcon';
+import { Feather, Ionicons, SimpleLineIcons } from "@expo/vector-icons";
+import Slider from "@react-native-community/slider";
+import { ApplicationStyles, Colors } from "../theme";
 
 interface PhotoData {
   width: number;
@@ -45,15 +26,15 @@ export default function TakePhoto({
   const [cameraReady, setCameraReady] = useState(false);
   const [sliderStyle, setSliderStyle] = useState({});
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [type, setType] = useState(CameraType.back);
   const [zoom, setZoom] = useState(0); // 0 to 1
-  const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
+  const [flashMode, setFlashMode] = useState(FlashMode.off);
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === 'granted');
-      setSliderStyle({ transform: [{ rotate: '-90deg' }] });
+      setHasPermission(status === "granted");
+      setSliderStyle({ transform: [{ rotate: "-90deg" }] });
     })();
   }, []);
 
@@ -64,7 +45,7 @@ export default function TakePhoto({
     ) {
       // @ts-ignore
       const data = await cameraRef.current.takePictureAsync();
-      console.log('saving photo preview', data);
+      console.log("saving photo preview", data);
       setPhoto(data);
     }
   };
@@ -93,7 +74,7 @@ export default function TakePhoto({
         />
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: "row",
             backgroundColor: Colors.swireSuperDarkGray,
           }}
         >
@@ -131,11 +112,11 @@ export default function TakePhoto({
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
+          justifyContent: "center",
+          alignItems: "center",
+          position: "absolute",
           left: 20,
-          height: '100%',
+          height: "100%",
         }}
       >
         <Feather name="plus" size={24} color="white" />
@@ -143,8 +124,8 @@ export default function TakePhoto({
           style={{
             height: 225,
             width: 24,
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
             marginVertical: 15,
           }}
         >
@@ -157,7 +138,7 @@ export default function TakePhoto({
               // borderRadius: 10,
             }}
           />
-          <View style={{ position: 'absolute', bottom: 100 }}>
+          <View style={{ position: "absolute", bottom: 100 }}>
             <Slider
               style={[
                 {
@@ -166,7 +147,7 @@ export default function TakePhoto({
                   borderWidth: 1,
                   borderColor: Colors.white,
                   borderRadius: 5,
-                  transform: [{ rotate: '-90deg' }],
+                  transform: [{ rotate: "-90deg" }],
                 },
                 sliderStyle,
               ]}
@@ -189,23 +170,21 @@ export default function TakePhoto({
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
+          justifyContent: "center",
+          alignItems: "center",
+          position: "absolute",
           right: 0,
-          height: '100%',
+          height: "100%",
         }}
       >
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => {
               setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
+                type === CameraType.back ? CameraType.front : CameraType.back,
               );
             }}
-            style={{ transform: [{ rotate: '90deg' }] }}
+            style={{ transform: [{ rotate: "90deg" }] }}
           >
             <SimpleLineIcons name="refresh" size={30} color="white" />
           </TouchableOpacity>
@@ -216,12 +195,12 @@ export default function TakePhoto({
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
-          <Text style={{ ...styles.text, color: '#ccaf6a', fontSize: 15 }}>
-            {' '}
-            PHOTO{' '}
+          <Text style={{ ...styles.text, color: "#ccaf6a", fontSize: 15 }}>
+            {" "}
+            PHOTO{" "}
           </Text>
         </View>
-        <View style={{ position: 'absolute', bottom: 0, margin: 20 }}>
+        <View style={{ position: "absolute", bottom: 0, margin: 20 }}>
           <TouchableOpacity onPress={onCancel}>
             <Text style={styles.text}> Cancel</Text>
           </TouchableOpacity>
@@ -234,13 +213,13 @@ export default function TakePhoto({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   camera: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonContainer: {
     // borderWidth: 1,
@@ -248,11 +227,11 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 50,
     // borderColor: 'white',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: "rgba(0,0,0,0.5)",
     borderRadius: 50,
   },
   text: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
   },
 });

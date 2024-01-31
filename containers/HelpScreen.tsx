@@ -55,16 +55,7 @@ export default function HelpScreen({ navigation }: Props) {
               <Text style={styles.buttonText}>(801)816-5333</Text>
             </TouchableOpacity>
           </View>
-          <Text
-            style={{
-              alignSelf: "center",
-              fontSize: 20,
-              fontFamily: Fonts.type.base,
-              fontWeight: Fonts.weight.bold,
-            }}
-          >
-            {t("support.or")}
-          </Text>
+          <Text style={styles.orText}>{t("support.or")}</Text>
           <View
             style={{
               width: "100%",
@@ -82,7 +73,6 @@ export default function HelpScreen({ navigation }: Props) {
             >
               <Ionicons name="paper-plane" size={24} color="white" />
               <Text style={styles.buttonText}>
-                {" "}
                 operationalexcellencetechnology@swirecc.com
               </Text>
             </TouchableOpacity>
@@ -120,5 +110,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     fontFamily: Fonts.type.base,
+  },
+  orText: {
+    textAlign: "center",
+    fontSize: 20,
+    fontFamily: Fonts.type.base,
+    fontWeight: Fonts.weight.bold as "bold",
   },
 });

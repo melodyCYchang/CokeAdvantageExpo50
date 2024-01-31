@@ -58,10 +58,13 @@ export default function RootContainer() {
         appState = nextAppState;
       };
 
-      AppState.addEventListener("change", handleAppStateChange);
+      const appStateChange = AppState.addEventListener(
+        "change",
+        handleAppStateChange,
+      );
 
       return () => {
-        AppState.removeEventListener("change", handleAppStateChange);
+        appStateChange.remove();
       };
     }
   }, [appState]);

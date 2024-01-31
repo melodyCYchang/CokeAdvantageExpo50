@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Text, View, TextInput, Button, Alert, StyleSheet } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import { t } from 'i18n-js';
-import { Colors } from '../theme';
+import { t } from "i18n-js";
+import React, { useState } from "react";
+import { Controller } from "react-hook-form";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Colors } from "../theme";
 
 interface TextFieldControllerProps {
   name: string;
@@ -52,7 +52,7 @@ export default function TextInputController({
   rules = {},
   ...rest
 }: TextFieldControllerProps) {
-  if (required) rules.required = { value: true, message: 'error.required' };
+  if (required) rules.required = { value: true, message: "error.required" };
   const errorText = error?.message && t(error.message);
   const [isError, setIsError] = useState(false);
 
@@ -83,7 +83,7 @@ export default function TextInputController({
             placeholderTextColor="#dbd7d7"
             secureTextEntry={password}
             autoCapitalize={autoCapitalize}
-            autoCompleteType={autoCompleteType}
+            autoComplete={autoCompleteType}
             autoFocus={autoFocus}
           />
         )}
@@ -95,7 +95,7 @@ export default function TextInputController({
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    width: "100%",
     marginBottom: 10,
   },
   input: {

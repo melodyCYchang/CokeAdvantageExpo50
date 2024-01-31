@@ -1,87 +1,68 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp } from "@react-navigation/stack";
+import { ResizeMode } from "expo-av";
+import React, { useRef, useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  Button,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
   Animated,
-  TouchableWithoutFeedback,
-  TextStyle,
-  TouchableNativeFeedbackProps,
-  TouchableOpacityProps,
-  TouchableNativeFeedback,
-  Platform,
   ImageBackground,
-} from 'react-native';
-import { Video, AVPlaybackStatus } from 'expo-av';
+  ImageResizeMode,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 
-import { MaterialIcons } from '@expo/vector-icons';
-import PDFReader from 'rn-pdf-reader-js';
-import Slider from '@react-native-community/slider';
+import { MaterialIcons } from "@expo/vector-icons";
 
-import { useDispatch } from 'react-redux';
-import { ApplicationStyles, Colors } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { resetUser } from '../redux/user';
-import FolderTile from '../components/FolderTile';
-import { useGetQuickLinksQuery } from '../services/wpApi';
-import { findQuicklinkByTermId } from '../utils/findQuicklinkByTermID';
-import FilesTile from '../components/GetFilesTile';
-import { getDownloadPath } from '../redux/downloads';
-import { ControlStates, TouchableButton } from './VideoDisplayScreen';
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { Colors } from "../theme";
+import { ControlStates, TouchableButton } from "./VideoDisplayScreen";
 
 export const styles = StyleSheet.create({
   errorWrapper: {
     ...StyleSheet.absoluteFillObject,
     paddingHorizontal: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   videoWrapper: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   iconWrapper: {
     borderRadius: 100,
-    overflow: 'hidden',
+    overflow: "hidden",
     padding: 10,
   },
   topInfoWrapper: {
-    position: 'absolute',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    position: "absolute",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     flex: 1,
     top: 0,
     left: 0,
     right: 0,
     padding: 2,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: "rgba(0,0,0,0.4)",
   },
   bottomInfoWrapper: {
-    position: 'absolute',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    position: "absolute",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     flex: 1,
     bottom: 0,
     left: 0,
     right: 0,
     padding: 2,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: "rgba(0,0,0,0.4)",
   },
-  timeLeft: { backgroundColor: 'transparent', marginLeft: 5 },
-  timeRight: { backgroundColor: 'transparent', marginRight: 5 },
+  timeLeft: { backgroundColor: "transparent", marginLeft: 5 },
+  timeRight: { backgroundColor: "transparent", marginRight: 5 },
   slider: { flex: 1, paddingHorizontal: 10 },
 });
 
 type ImageDisplayScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'ImageDisplayScreen'
+  "ImageDisplayScreen"
 >;
 
 type Props = {
@@ -98,7 +79,7 @@ export default function ImageDisplayScreen({ route, navigation }: Props) {
 
   let controlsTimer: NodeJS.Timeout | null = null;
 
-  const [resize, setResize] = useState('contain');
+  const [resize, setResize] = useState("contain");
   const controlsOpacity = useRef(new Animated.Value(1)).current;
   const [controlsState, setControlsState] = useState(ControlStates.Visible);
 
@@ -214,17 +195,17 @@ export default function ImageDisplayScreen({ route, navigation }: Props) {
       style={{
         flex: 1,
         backgroundColor: Colors.black,
-        maxWidth: '100%',
+        maxWidth: "100%",
       }}
-      resizeMode={resize}
+      resizeMode={resize as ImageResizeMode}
     >
       <TouchableWithoutFeedback onPress={animationToggle}>
         <Animated.View
           style={{
             ...StyleSheet.absoluteFillObject,
             opacity: controlsOpacity,
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <View
@@ -235,7 +216,7 @@ export default function ImageDisplayScreen({ route, navigation }: Props) {
           />
           <View
             pointerEvents={
-              controlsState === ControlStates.Visible ? 'auto' : 'none'
+              controlsState === ControlStates.Visible ? "auto" : "none"
             }
           >
             <View style={styles.iconWrapper}>
@@ -287,19 +268,17 @@ export default function ImageDisplayScreen({ route, navigation }: Props) {
       >
         <TouchableButton
           onPress={() => {
-            if (resize === 'contain') {
-              setResize('cover');
+            if (resize === "contain") {
+              setResize("cover");
             } else {
-              setResize('contain');
+              setResize("contain");
             }
           }}
         >
           <View>
             <MaterialIcons
               name={
-                resize === Video.RESIZE_MODE_COVER
-                  ? 'fullscreen-exit'
-                  : 'fullscreen'
+                resize === ResizeMode.COVER ? "fullscreen-exit" : "fullscreen"
               }
               // style={props.icon.style}
               // size={props.icon.size! / 2}

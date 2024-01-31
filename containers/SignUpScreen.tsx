@@ -77,7 +77,7 @@ export default function SignUpScreen({ navigation }: Props) {
       }
 
       setErrorText("unknown error");
-    } catch (err) {
+    } catch (err: any) {
       console.error("login", err.message);
       setErrorText(err.message);
     }

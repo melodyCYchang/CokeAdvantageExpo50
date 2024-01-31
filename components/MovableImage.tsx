@@ -1,34 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-underscore-dangle */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
-  StyleSheet,
-  View,
-  StatusBar,
   Animated,
   Image,
-  TouchableWithoutFeedback,
-  ActivityIndicator,
+  StyleSheet,
   Text,
-} from 'react-native';
-import { useDispatch } from 'react-redux';
+  View,
+} from "react-native";
 
 import {
+  LongPressGestureHandler,
+  LongPressGestureHandlerStateChangeEvent,
   PanGestureHandler,
   PanGestureHandlerStateChangeEvent,
   PinchGestureHandler,
   PinchGestureHandlerStateChangeEvent,
   RotationGestureHandler,
   RotationGestureHandlerStateChangeEvent,
-  LongPressGestureHandler,
-  LongPressGestureHandlerStateChangeEvent,
   State,
-} from 'react-native-gesture-handler';
+} from "react-native-gesture-handler";
 
-import { ApplicationStyles } from '../theme';
-import TakePhoto from './TakePhoto';
-import { USE_NATIVE_DRIVER } from '../config';
+import { USE_NATIVE_DRIVER } from "../config";
 
 export default function MovableImage({
   source,
@@ -44,7 +39,7 @@ export default function MovableImage({
   onRemoveImage: () => void;
 }) {
   const [loading, setLoading] = useState(true);
-  console.log('image source: ', source);
+  console.log("image source: ", source);
 
   // Inital Values?
   // const xval = 0;
@@ -54,48 +49,48 @@ export default function MovableImage({
   //   source.machine_left
   // );
   console.log(
-    '🚀 ~ file: MovableImage.tsx ~ line 44 ~ typeof source.machine_left',
-    source
+    "🚀 ~ file: MovableImage.tsx ~ line 44 ~ typeof source.machine_left",
+    source,
   );
 
   const xval =
-    typeof source.machine_left === 'string'
+    typeof source.machine_left === "string"
       ? parseFloat(source.machine_left)
       : source.machine_left;
   const yval =
-    typeof source.machine_top === 'string'
+    typeof source.machine_top === "string"
       ? parseFloat(source.machine_top)
       : source.machine_top;
 
-  console.log('xy init values: ', xval, yval);
+  console.log("xy init values: ", xval, yval);
 
   const panRef = useRef<PanGestureHandler>();
   const rotationRef = useRef<RotationGestureHandler>();
   const pinchRef = useRef<PinchGestureHandler>();
 
-  const onLongPress = (event) => {
+  const onLongPress = (event: LongPressGestureHandlerStateChangeEvent) => {
     if (event.nativeEvent.state === State.ACTIVE) {
       Alert.alert(
-        'Remove',
-        'Remove Image?',
+        "Remove",
+        "Remove Image?",
         [
           {
-            text: 'Remove',
+            text: "Remove",
             onPress: () => {
-              console.log('removed pressed');
+              console.log("removed pressed");
               onRemoveImage();
             },
-            style: 'destructive',
+            style: "destructive",
           },
           {
-            text: 'Cancel',
+            text: "Cancel",
             onPress: () => {
-              console.log('cancel pressed');
+              console.log("cancel pressed");
             },
-            style: 'cancel',
+            style: "cancel",
           },
         ],
-        { cancelable: true }
+        { cancelable: true },
       );
     }
   };
@@ -114,30 +109,30 @@ export default function MovableImage({
           },
         },
       ],
-      { useNativeDriver: USE_NATIVE_DRIVER }
+      { useNativeDriver: USE_NATIVE_DRIVER },
     ),
-    []
+    [],
   );
 
   /* Rotation */
   const _rotate = useRef(
-    new Animated.Value(Number(source.machine_rotation))
+    new Animated.Value(Number(source.machine_rotation)),
   ).current;
   const _rotateStr = _rotate.interpolate({
     inputRange: [-100, 100],
-    outputRange: ['-100rad', '100rad'],
+    outputRange: ["-100rad", "100rad"],
   });
   let _lastRotate = 0;
   const _onRotateGestureEvent = useCallback(
     Animated.event([{ nativeEvent: { rotation: _rotate } }], {
       useNativeDriver: USE_NATIVE_DRIVER,
     }),
-    []
+    [],
   );
 
   /* Pinching */
   const _baseScale = useRef(
-    new Animated.Value(Number(source.machine_scale))
+    new Animated.Value(Number(source.machine_scale)),
   ).current;
   const _pinchScale = useRef(new Animated.Value(1)).current;
   const scale = Animated.multiply(_baseScale, _pinchScale);
@@ -146,23 +141,23 @@ export default function MovableImage({
     Animated.event([{ nativeEvent: { scale: _pinchScale } }], {
       useNativeDriver: USE_NATIVE_DRIVER,
     }),
-    []
+    [],
   );
 
   const _onRotateHandlerStateChange = (
-    event: RotationGestureHandlerStateChangeEvent
+    event: RotationGestureHandlerStateChangeEvent,
   ) => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
       _lastRotate += event.nativeEvent.rotation;
       _rotate.setOffset(_lastRotate);
       _rotate.setValue(0);
       onRotationChange(_lastRotate);
-      console.log('xy _onRotateHandlerStateChange: ', _rotate);
+      console.log("xy _onRotateHandlerStateChange: ", _rotate);
     }
   };
 
   const _onPinchHandlerStateChange = (
-    event: PinchGestureHandlerStateChangeEvent
+    event: PinchGestureHandlerStateChangeEvent,
   ) => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
       // _lastRotate += event.nativeEvent.rotation;
@@ -173,7 +168,7 @@ export default function MovableImage({
       _baseScale.setValue(_lastScale);
       _pinchScale.setValue(1);
       onScaleChange(_lastScale);
-      console.log('xy _onPinchHandlerStateChange: ', _baseScale);
+      console.log("xy _onPinchHandlerStateChange: ", _baseScale);
     }
   };
 
@@ -187,7 +182,7 @@ export default function MovableImage({
       _translateY.setValue(0);
 
       onPositionChange(_lastOffset.x, _lastOffset.y);
-      console.log('xy _onPanStateChange: ', _translateX, _translateY);
+      console.log("xy _onPanStateChange: ", _translateX, _translateY);
     }
   };
   // useEffect(() => {
@@ -213,10 +208,7 @@ export default function MovableImage({
           onGestureEvent={_onRotateGestureEvent}
           onHandlerStateChange={_onRotateHandlerStateChange}
         >
-          <Animated.View
-            style={[panStyle, styles.stickerContainer]}
-            collapsable={false}
-          >
+          <Animated.View style={[panStyle]} collapsable={false}>
             <PinchGestureHandler
               ref={pinchRef}
               simultaneousHandlers={[panRef, rotationRef]}
@@ -238,10 +230,10 @@ export default function MovableImage({
 
                           { rotate: _rotateStr },
                         ],
-                        position: 'relative',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
+                        position: "relative",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
                       },
                     ]}
                   >
@@ -257,11 +249,11 @@ export default function MovableImage({
                         style={{
                           padding: 20,
                           borderWidth: 2,
-                          borderColor: 'white',
+                          borderColor: "white",
                           borderRadius: 15,
-                          backgroundColor: 'rgba(255,255,255,0.8)',
-                          justifyContent: 'center',
-                          alignItems: 'center',
+                          backgroundColor: "rgba(255,255,255,0.8)",
+                          justifyContent: "center",
+                          alignItems: "center",
                         }}
                       >
                         <ActivityIndicator size="large" />
@@ -282,8 +274,8 @@ export default function MovableImage({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   pinchableImage: {
     width: 300,
@@ -291,12 +283,12 @@ const styles = StyleSheet.create({
   },
   camera: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonContainer: {
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: "white",
   },
   text: {
     fontSize: 16,

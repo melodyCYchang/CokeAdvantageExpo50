@@ -1,4 +1,4 @@
-export const searchResult = (obj: Array<any>, searchText: string) => {
+export const searchResult = (searchText: string, obj?: Array<any>) => {
   if (!obj) return false;
   const temp = new Array<any>();
 

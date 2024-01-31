@@ -1,5 +1,5 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import { AVPlaybackStatus, Video } from "expo-av";
+import { AVPlaybackStatus, Audio, ResizeMode, Video } from "expo-av";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -161,10 +161,10 @@ export default function VideoDisplayScreen({ route, navigation }: Props) {
 
   let playbackInstance: Video | null = null;
   let controlsTimer: NodeJS.Timeout | null = null;
-  let initialShow = 1;
+  let initialShow = true;
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [resize, setResize] = useState(Video.RESIZE_MODE_CONTAIN);
+  const [resize, setResize] = useState(ResizeMode.CONTAIN);
   const controlsOpacity = useRef(new Animated.Value(1)).current;
   const [controlsState, setControlsState] = useState(ControlStates.Visible);
   const [playbackInstanceInfo, setPlaybackInstanceInfo] = useState({
@@ -489,19 +489,17 @@ export default function VideoDisplayScreen({ route, navigation }: Props) {
       >
         <TouchableButton
           onPress={() => {
-            if (resize === Video.RESIZE_MODE_COVER) {
-              setResize(Video.RESIZE_MODE_CONTAIN);
+            if (resize === ResizeMode.COVER) {
+              setResize(ResizeMode.CONTAIN);
             } else {
-              setResize(Video.RESIZE_MODE_COVER);
+              setResize(ResizeMode.COVER);
             }
           }}
         >
           <View>
             <MaterialIcons
               name={
-                resize === Video.RESIZE_MODE_COVER
-                  ? "fullscreen-exit"
-                  : "fullscreen"
+                resize === ResizeMode.COVER ? "fullscreen-exit" : "fullscreen"
               }
               // style={props.icon.style}
               // size={props.icon.size! / 2}

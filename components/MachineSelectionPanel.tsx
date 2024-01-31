@@ -1,38 +1,33 @@
-import React, { useState } from 'react';
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import React, { useState } from "react";
 import {
+  ScrollView,
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
-  Image,
-  ScrollView,
-} from 'react-native';
-import { format } from 'date-fns';
-import {
-  MaterialCommunityIcons,
-  MaterialIcons,
-  FontAwesome,
-} from '@expo/vector-icons';
-import { Colors, Fonts } from '../theme';
-import { useGetMachinesQuery } from '../services/wpApi';
-import MachineFilter from './MahchineFilter';
-import LoadableImage from './LoadableImage';
+  View,
+} from "react-native";
+import { Machine } from "~/types/Machine";
+import { useGetMachinesQuery } from "../services/wpApi";
+import { Colors, Fonts } from "../theme";
+import LoadableImage from "./LoadableImage";
+import MachineFilter from "./MahchineFilter";
 
 export default function MachineSelectionPanel({ onPress, addToList }: any) {
   const [filterDialog, setFilterDialog] = useState(false);
-  const [filterValue, setFilterValue] = useState('ALL');
+  const [filterValue, setFilterValue] = useState("ALL");
 
   const { data, isFetching, isLoading } = useGetMachinesQuery();
   let machines: any = [];
-  if (filterValue.toLowerCase() !== 'all') {
+  if (filterValue.toLowerCase() !== "all") {
     data?.forEach((machine) => {
-      if (machine?.type.replaceAll('_', ' ') === filterValue.toLowerCase()) {
+      if (machine?.type.replaceAll("_", " ") === filterValue.toLowerCase()) {
         machines.push(machine);
       }
     });
-    console.log('filtering: ', filterValue);
+    console.log("filtering: ", filterValue);
 
-    console.log('machine data: ', machines);
+    console.log("machine data: ", machines);
   } else {
     machines = data;
   }
@@ -51,17 +46,17 @@ export default function MachineSelectionPanel({ onPress, addToList }: any) {
       <View style={styles.container}>
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
             padding: 10,
           }}
         >
           <TouchableOpacity
             style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
             }}
             onPress={onPress}
           >
@@ -77,11 +72,11 @@ export default function MachineSelectionPanel({ onPress, addToList }: any) {
             size={40}
             color={Colors.swireRed}
           />
-          <View style={{ width: '35%' }}>
+          <View style={{ width: "35%" }}>
             <Text
               style={{
                 ...Fonts.style.tileText,
-                textAlign: 'left',
+                textAlign: "left",
                 color: Colors.swireDarkGray,
               }}
             >
@@ -91,7 +86,7 @@ export default function MachineSelectionPanel({ onPress, addToList }: any) {
         </View>
         <ScrollView>
           <View style={styles.scrollContainer}>
-            {machines?.map((machine) => {
+            {machines?.map((machine: Machine) => {
               //   console.log('machine: ', machine?.thumbnail?.sizes?.medium[0]);
 
               return (
@@ -118,14 +113,14 @@ export default function MachineSelectionPanel({ onPress, addToList }: any) {
                       uri: machine?.media?.formats?.thumbnail?.url,
                     }}
                     style={{
-                      width: '100%',
+                      width: "100%",
                       //   height: '100%',
                       backgroundColor: Colors.white,
                       // width: 230,
                       // height: img.thumbnail.sizes.medium[2],
                       aspectRatio: aspectRatio(
                         machine?.media?.width,
-                        machine?.media?.height
+                        machine?.media?.height,
                       ),
                     }}
                     // resizeMode="contain"
@@ -135,22 +130,22 @@ export default function MachineSelectionPanel({ onPress, addToList }: any) {
             })}
           </View>
         </ScrollView>
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
           <TouchableOpacity
             style={{
-              width: '85%',
+              width: "85%",
               height: 50,
               borderWidth: 1,
               margin: 15,
-              justifyContent: 'center',
+              justifyContent: "center",
             }}
             onPress={() => setFilterDialog(true)}
           >
             <View
               style={{
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexDirection: 'row',
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexDirection: "row",
                 padding: 10,
               }}
             >
@@ -185,51 +180,51 @@ export default function MachineSelectionPanel({ onPress, addToList }: any) {
 
 const styles = StyleSheet.create({
   rootContainer: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     top: 0,
     right: 0,
     bottom: 0,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   closeContainer: {
     flex: 1,
-    height: '100%',
+    height: "100%",
   },
   container: {
     width: 350,
-    height: '100%',
+    height: "100%",
     backgroundColor: Colors.white,
-    position: 'absolute',
+    position: "absolute",
     right: 0,
   },
   folderTile: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "flex-start",
     height: 125,
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: 20,
   },
   tile: {
     margin: 10,
     width: 150,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   tileText: {
-    alignItems: 'center',
+    alignItems: "center",
     margin: 20,
   },
   scrollContainer: {
     flex: 1,
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,

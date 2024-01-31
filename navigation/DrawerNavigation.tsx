@@ -1,37 +1,34 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React from "react";
+import { useSelector } from "react-redux";
 
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { StatusBar } from 'react-native';
-import DashboardScreen from '../containers/DashboardScreen';
-import { getUser } from '../redux/user';
-import LoginScreen from '../containers/LoginScreen';
-import LoginWithPasswordScreen from '../containers/LoginWithPasswordScreen';
-import SalesMockupScreen from '../containers/SalesMockupScreen';
-import ImageGalleryScreen from '../containers/ImageGalleryScreen';
-import FolderScreen from '../containers/FolderScreen';
-import CustomDrawerContent from './CustomDrawerContent';
-import ImageDetailsScreen from '../containers/ImageDetailsScreen';
-import SignUpScreen from '../containers/SignUpScreen';
-import MaximizingProfitabilityScreen from '../containers/MaximizingProfitabilityScreen';
-import FreestyleProfitabilityScreen from '../containers/FreestyleProfitabilityScreen';
-import ReportsScreen from '../containers/ReportsScreen';
-import SaveMockupScreen from '../containers/SaveMockupScreen';
-import MediaDisplayScreen from '../containers/MediaDisplayScreen';
-import VideoDisplayScreen from '../containers/VideoDisplayScreen';
-import ImageDisplayScreen from '../containers/ImageDisplayScreen';
-import FolderStackNavigation from './FolderStackNavigation';
-import { Colors } from '../theme';
-import CustomHeaderContent from './CustomHeaderContent';
-import FreestyleScreen from '../containers/FreestyleScreen';
-import ChannelPresentationsScreen from '../containers/ChannelPresentationsScreen';
-import SignUpHeaderContent from './SignUpHeaderContent';
-import SearchResultScreen from '../containers/SearchResultScreen';
-import { USE_PASSWORD_LOGIN } from '../config';
-import HelpScreen from '../containers/HelpScreen';
-import ActivitiesScreen from '../containers/ActivitiesScreen';
+import { USE_PASSWORD_LOGIN } from "../config";
+import ActivitiesScreen from "../containers/ActivitiesScreen";
+import ChannelPresentationsScreen from "../containers/ChannelPresentationsScreen";
+import DashboardScreen from "../containers/DashboardScreen";
+import FreestyleProfitabilityScreen from "../containers/FreestyleProfitabilityScreen";
+import FreestyleScreen from "../containers/FreestyleScreen";
+import HelpScreen from "../containers/HelpScreen";
+import ImageDetailsScreen from "../containers/ImageDetailsScreen";
+import ImageDisplayScreen from "../containers/ImageDisplayScreen";
+import ImageGalleryScreen from "../containers/ImageGalleryScreen";
+import LoginScreen from "../containers/LoginScreen";
+import LoginWithPasswordScreen from "../containers/LoginWithPasswordScreen";
+import MaximizingProfitabilityScreen from "../containers/MaximizingProfitabilityScreen";
+import MediaDisplayScreen from "../containers/MediaDisplayScreen";
+import ReportsScreen from "../containers/ReportsScreen";
+import SalesMockupScreen from "../containers/SalesMockupScreen";
+import SaveMockupScreen from "../containers/SaveMockupScreen";
+import SearchResultScreen from "../containers/SearchResultScreen";
+import SignUpScreen from "../containers/SignUpScreen";
+import VideoDisplayScreen from "../containers/VideoDisplayScreen";
+import { getUser } from "../redux/user";
+import CustomDrawerContent from "./CustomDrawerContent";
+import CustomHeaderContent from "./CustomHeaderContent";
+import FolderStackNavigation from "./FolderStackNavigation";
+import SignUpHeaderContent from "./SignUpHeaderContent";
 
 const SignedOutStack = createNativeStackNavigator();
 // const Stack = createNativeStackNavigator();
@@ -50,7 +47,6 @@ const DrawerNavigation = () => {
         // screenOptions={(props) => <CustomHeaderContent {...props} />}
         screenOptions={{
           header: (props) => <CustomHeaderContent {...props} />,
-          gestureEnabled: false,
         }}
       >
         <Drawer.Screen
@@ -124,7 +120,7 @@ const DrawerNavigation = () => {
   return (
     <SignedOutStack.Navigator
       initialRouteName={
-        USE_PASSWORD_LOGIN ? 'LoginWithPasswordScreen' : 'LoginScreen'
+        USE_PASSWORD_LOGIN ? "LoginWithPasswordScreen" : "LoginScreen"
       }
       // screenOptions={{ headerShown: false }}
       screenOptions={{

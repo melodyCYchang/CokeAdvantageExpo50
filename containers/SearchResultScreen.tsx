@@ -51,7 +51,10 @@ export default function SearchResultScreen({ route, navigation }: Props) {
 
   useEffect(() => {
     determineAndSetOrientation();
-    Dimensions.addEventListener("change", determineAndSetOrientation);
+    const orientationChange = Dimensions.addEventListener(
+      "change",
+      determineAndSetOrientation,
+    );
     Device.getDeviceTypeAsync().then((deviceType) => {
       if (deviceType === Device.DeviceType.PHONE) {
         setLandscapeWidth("33%");
@@ -65,7 +68,7 @@ export default function SearchResultScreen({ route, navigation }: Props) {
     });
 
     return () => {
-      Dimensions.removeEventListener("change", determineAndSetOrientation);
+      orientationChange.remove();
     };
   }, []);
 
@@ -91,7 +94,7 @@ export default function SearchResultScreen({ route, navigation }: Props) {
   //   inputText
   // );
 
-  const results = searchResult(quickLinks, inputText);
+  const results = searchResult(inputText, quickLinks);
 
   //   if (quickLinks && !quickLink) {
   //     navigation.navigate('DashboardScreen');

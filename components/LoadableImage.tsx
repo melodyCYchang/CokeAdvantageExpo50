@@ -1,33 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-underscore-dangle */
-import React, { useCallback, useRef, useState } from 'react';
-import {
-  Alert,
-  StyleSheet,
-  View,
-  StatusBar,
-  Animated,
-  Image,
-  TouchableWithoutFeedback,
-  ActivityIndicator,
-} from 'react-native';
-import { useDispatch } from 'react-redux';
-
-import {
-  PanGestureHandler,
-  PanGestureHandlerStateChangeEvent,
-  PinchGestureHandler,
-  PinchGestureHandlerStateChangeEvent,
-  RotationGestureHandler,
-  RotationGestureHandlerStateChangeEvent,
-  LongPressGestureHandler,
-  LongPressGestureHandlerStateChangeEvent,
-  State,
-} from 'react-native-gesture-handler';
-
-import { ApplicationStyles } from '../theme';
-import TakePhoto from './TakePhoto';
-import { USE_NATIVE_DRIVER } from '../config';
+import React, { useState } from "react";
+import { ActivityIndicator, Image, StyleSheet, View } from "react-native";
 
 export default function LoadableImage({ style, ...props }) {
   const [loading, setLoading] = useState(true);
@@ -36,10 +10,10 @@ export default function LoadableImage({ style, ...props }) {
     <View
       style={{
         ...style,
-        position: 'relative',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        position: "relative",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Image style={style} {...props} onLoad={() => setLoading(false)} />
@@ -51,8 +25,8 @@ export default function LoadableImage({ style, ...props }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   pinchableImage: {
     width: 300,
@@ -60,12 +34,12 @@ const styles = StyleSheet.create({
   },
   camera: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonContainer: {
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: "white",
   },
   text: {
     fontSize: 16,

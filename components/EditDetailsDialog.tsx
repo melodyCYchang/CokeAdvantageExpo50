@@ -1,26 +1,14 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { t } from 'i18n-js';
-import { ApplicationStyles, Colors, Fonts, Metrics } from '../theme';
-import { setUser } from '../redux/user';
-import ErrorBanner from './ErrorBanner';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { StyleSheet, Text, View } from "react-native";
+import { Colors, Fonts } from "../theme";
 
-import TextInputController from './TextInputController';
-import {
-  useForgotPasswordMutation,
-  useLoginMutation,
-  useUpdateMockupMutation,
-  useUpdateMockupNameMutation,
-} from '../services/wpApi';
-import { LoginPayload } from '../types/LoginPayload';
-import validateApiResponse from '../utils/validateApiResponse';
-import DialogPopUp from './DialogPopUp';
-import { ForgotPasswordPayload } from '../types/ForgotPasswordPayload';
-import MiniButton from './MiniButton';
-import { getLogin } from '../redux/login';
-import { UpdateMockupPayload } from '../types/UpdateMockupPayload';
+import { useUpdateMockupNameMutation } from "../services/wpApi";
+import { UpdateMockupPayload } from "../types/UpdateMockupPayload";
+import validateApiResponse from "../utils/validateApiResponse";
+import DialogPopUp from "./DialogPopUp";
+import MiniButton from "./MiniButton";
+import TextInputController from "./TextInputController";
 
 export default function EditDetailsDialog({
   onClose,
@@ -54,12 +42,12 @@ export default function EditDetailsDialog({
   console.log(imageSource.post_title);
 
   // const [busy, setBusy] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [errorText, setErrorText] = useState("");
 
   const onSubmit = async (values: UpdateMockupPayload) => {
     const { name } = values;
     try {
-      setErrorText('');
+      setErrorText("");
       const data: any = await updateMockup({
         name,
         id: imageSource.id,
@@ -67,8 +55,8 @@ export default function EditDetailsDialog({
       validateApiResponse(data);
 
       onClose();
-    } catch (err) {
-      console.error('login', err.message);
+    } catch (err: any) {
+      console.error("login", err.message);
       setErrorText(err.message);
     }
   };
@@ -79,13 +67,13 @@ export default function EditDetailsDialog({
       setVisibility={onClose}
       dialogWidth={300}
     >
-      {errorText !== '' && (
+      {errorText !== "" && (
         <Text
           style={{
             fontFamily: Fonts.type.base,
             color: Colors.swireRed,
             fontSize: 20,
-            fontWeight: 'bold',
+            fontWeight: "bold",
           }}
         >
           {errorText}
@@ -111,10 +99,10 @@ export default function EditDetailsDialog({
       />
       <View
         style={{
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          width: '100%',
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          width: "100%",
         }}
       >
         <MiniButton
@@ -140,11 +128,11 @@ const styles = StyleSheet.create({
   textInput: {
     color: Colors.white,
     borderColor: Colors.white,
-    width: '35%',
+    width: "35%",
   },
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     flex: 1,
   },
   loginBtn: {
@@ -152,23 +140,23 @@ const styles = StyleSheet.create({
     width: 150,
     padding: 10,
     margin: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   errorText: {
     color: Colors.swireRed,
-    textAlign: 'center',
+    textAlign: "center",
     margin: 5,
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   btnText: {
     fontSize: 20,
     color: Colors.white,
-    textAlign: 'center',
+    textAlign: "center",
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -186,7 +174,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.white,
     borderWidth: 3,
     color: Colors.white,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 20,
   },
   popuInput: {

@@ -1,4 +1,4 @@
-export const findChildFoldersByTermID = (obj: Array<any>, termID: number) => {
+export const findChildFoldersByTermID = (termID: number, obj?: Array<any>) => {
   if (!obj) return false;
   const temp = new Array<any>();
 

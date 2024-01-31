@@ -292,7 +292,7 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
                 }
               }}
             >
-              <Ionicons name="ios-caret-back-circle" size={55} color="white" />
+              <Ionicons name="caret-back-circle" size={55} color="white" />
               <Text
                 style={{
                   fontFamily: Fonts.type.base,

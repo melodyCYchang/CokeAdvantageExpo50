@@ -1,13 +1,11 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
-import * as Updates from 'expo-updates';
-import { format } from 'date-fns';
-import { MaterialIcons } from '@expo/vector-icons';
-import { Colors } from '../theme';
-import getVersion from '../utils/getVersion';
+import * as Updates from "expo-updates";
+import React from "react";
+import { Alert, Text, TouchableOpacity } from "react-native";
+import { Colors } from "../theme";
+import getVersion from "../utils/getVersion";
 
 export default function VersionText(
-  { color }: { color?: string } = { color: Colors.swireDarkGray }
+  { color }: { color?: string } = { color: Colors.swireDarkGray },
 ) {
   const handleCheckForUpdate = async () => {
     try {
@@ -19,16 +17,16 @@ export default function VersionText(
         await Updates.reloadAsync();
         // setUpdating(false);
       } else {
-        Alert.alert('Application is up to date');
+        Alert.alert("Application is up to date");
       }
-    } catch (err) {
+    } catch (err: any) {
       Alert.alert(`error checking for update ${err.message}`);
     }
   };
 
   return (
     <TouchableOpacity onPress={handleCheckForUpdate}>
-      <Text style={{ color, textAlign: 'center' }}>{getVersion()}</Text>
+      <Text style={{ color, textAlign: "center" }}>{getVersion()}</Text>
     </TouchableOpacity>
   );
 }

@@ -53,11 +53,7 @@ export default function EmailButton({
               body: message,
               attachments: [downloadedFile.localFile],
             });
-            console.log(
-              "🚀 ~ file: EmailButton.tsx ~ line 51 ~ onPress={ ~ a",
-              a,
-            );
-          } catch (err) {
+          } catch (err: any) {
             console.log("error", err.message);
             // Alert(err.message);
           }
