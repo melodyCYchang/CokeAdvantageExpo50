@@ -1,51 +1,45 @@
 /* eslint-disable global-require */
-import React, { useEffect, useState } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp } from "@react-navigation/stack";
+import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  ScrollView,
-  TouchableOpacity,
   Dimensions,
   RefreshControl,
-} from 'react-native';
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 // @ts-ignore
-import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5 } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 
-import * as Device from 'expo-device';
+import * as Device from "expo-device";
 // import { SortableContainer, SortableGrid, SortableTile } from './drag-and-sort';
 // import SortableGrid from 'react-native-sortable-grid';
-import { ApplicationStyles, Colors, Fonts } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { getUser, resetUser, setStrapiID } from '../redux/user';
-import SearchBar from '../components/SearchBar';
-import FeatureTile from '../components/FeatureTile';
-import DashboardLibraryTile from '../components/DashboardLibraryTile';
-import AccountDetailsPanel from '../components/AccountDetailsPanel';
+import AccountDetailsPanel from "../components/AccountDetailsPanel";
+import DashboardLibraryTile from "../components/DashboardLibraryTile";
+import FeatureTile from "../components/FeatureTile";
+import SearchBar from "../components/SearchBar";
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { getUser, resetUser, setStrapiID } from "../redux/user";
+import { ApplicationStyles, Colors, Fonts } from "../theme";
 
-import { useGetFoldersStrapiQuery, useGetMeQuery } from '../services/wpApi';
-import { getRootFolders } from '../utils/getRootFolders';
-import MiniButton from '../components/MiniButton';
-import logoutAsync from '../redux/user/logoutAsync';
-import { getOrder, setOrder } from '../redux/dashboard';
-import SearchResults from '../components/SearchResults';
-import { getCanShowItems } from '../utils/getCanShowItems';
-import {
-  appendLog,
-  clearLog,
-  getPersistLog,
-  getPushToken,
-} from '../redux/persist';
-import { format } from 'date-fns';
-import loadActivitiesAsync from '../redux/user/loadActivitiesAsync';
-import { useFocusEffect } from '@react-navigation/native';
+import MiniButton from "../components/MiniButton";
+import SearchResults from "../components/SearchResults";
+import { getOrder, setOrder } from "../redux/dashboard";
+import { getPersistLog } from "../redux/persist";
+import { useAppDispatch } from "../redux/store";
+import loadActivitiesAsync from "../redux/user/loadActivitiesAsync";
+import logoutAsync from "../redux/user/logoutAsync";
+import { useGetFoldersStrapiQuery, useGetMeQuery } from "../services/wpApi";
+import { getCanShowItems } from "../utils/getCanShowItems";
+import { getRootFolders } from "../utils/getRootFolders";
 
 type DashboardScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'DashboardScreen'
+  "DashboardScreen"
 >;
 
 type Props = {
@@ -59,8 +53,8 @@ export default function DashboardScreen({ navigation }: Props) {
   //   '🚀 ~ file: DashboardScreen.tsx ~ line 61 ~ DashboardScreen ~ user',
   //   user
   // );
-  StatusBar.setBarStyle('light-content', true);
-  const dispatch = useDispatch();
+  StatusBar.setBarStyle("light-content", true);
+  const dispatch = useAppDispatch();
 
   // console.log(`user:: ${user?.displayName}`);
   const { data: me } = useGetMeQuery();
@@ -138,13 +132,13 @@ export default function DashboardScreen({ navigation }: Props) {
       //   return true;
       // }
       return false;
-    })
+    }),
   );
 
   const rootFoldersDate = getCanShowItems(
     rootFolders,
     me?.email,
-    me?.location?.location
+    me?.location?.location,
   );
 
   // rootFolders.sort(sortByKeys('weight', 'name', 'desc'));
@@ -161,41 +155,44 @@ export default function DashboardScreen({ navigation }: Props) {
   const [isSearching, setIsSearching] = useState(false);
 
   const [accountDetailsVisible, setAccountDetailsVisible] = useState(false);
-  const [orientation, setOrientation] = useState('PORTRAIT');
-  const [landscapeWidth, setLandscapeWidth] = useState('20%');
-  const [portraitWidth, setPortraitWidth] = useState('25%');
+  const [orientation, setOrientation] = useState("PORTRAIT");
+  const [landscapeWidth, setLandscapeWidth] = useState("20%");
+  const [portraitWidth, setPortraitWidth] = useState("25%");
   const [isPhone, setIsPhone] = useState(false);
 
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
 
   const determineAndSetOrientation = () => {
-    const { width } = Dimensions.get('window');
-    const { height } = Dimensions.get('window');
+    const { width } = Dimensions.get("window");
+    const { height } = Dimensions.get("window");
 
     if (width < height) {
-      setOrientation('PORTRAIT');
+      setOrientation("PORTRAIT");
     } else {
-      setOrientation('LANDSCAPE');
+      setOrientation("LANDSCAPE");
     }
   };
 
   useEffect(() => {
     determineAndSetOrientation();
-    Dimensions.addEventListener('change', determineAndSetOrientation);
+    const orientationChange = Dimensions.addEventListener(
+      "change",
+      determineAndSetOrientation,
+    );
     Device.getDeviceTypeAsync().then((deviceType) => {
       if (deviceType === Device.DeviceType.PHONE) {
-        setLandscapeWidth('33%');
-        setPortraitWidth('50%');
+        setLandscapeWidth("33%");
+        setPortraitWidth("50%");
         setIsPhone(true);
       } else if (deviceType === Device.DeviceType.TABLET) {
-        setLandscapeWidth('20%');
-        setPortraitWidth('25%');
+        setLandscapeWidth("20%");
+        setPortraitWidth("25%");
         setIsPhone(false);
       }
     });
 
     return () => {
-      Dimensions.removeEventListener('change', determineAndSetOrientation);
+      orientationChange.remove();
     };
   }, []);
 
@@ -212,25 +209,25 @@ export default function DashboardScreen({ navigation }: Props) {
 
   const features = [
     {
-      id: 'Sales Mockup',
-      name: 'Sales Mockup',
-      url: 'SalesMockupScreen',
-      icon: require('../assets/img/icon-camera.png'),
-      type: 'features',
+      id: "Sales Mockup",
+      name: "Sales Mockup",
+      url: "SalesMockupScreen",
+      icon: require("../assets/img/icon-camera.png"),
+      type: "features",
     },
     {
-      id: 'Image gallery',
-      name: 'Image gallery',
-      url: 'ImageGalleryScreen',
-      icon: require('../assets/img/icon-gallery.png'),
-      type: 'features',
+      id: "Image gallery",
+      name: "Image gallery",
+      url: "ImageGalleryScreen",
+      icon: require("../assets/img/icon-gallery.png"),
+      type: "features",
     },
     {
-      id: 'Maximizing Profitability',
-      name: 'Maximizing Profitability',
-      url: 'MaximizingProfitabilityScreen',
-      icon: require('../assets/img/icon-profit.png'),
-      type: 'features',
+      id: "Maximizing Profitability",
+      name: "Maximizing Profitability",
+      url: "MaximizingProfitabilityScreen",
+      icon: require("../assets/img/icon-profit.png"),
+      type: "features",
     },
     // {
     // id: 3,
@@ -240,11 +237,11 @@ export default function DashboardScreen({ navigation }: Props) {
     //   icon: require('../assets/img/icon-freestyle.png'),
     // },
     {
-      id: 'Reports',
-      name: 'Reports',
-      url: 'ReportsScreen',
-      icon: require('../assets/img/icon-report.png'),
-      type: 'features',
+      id: "Reports",
+      name: "Reports",
+      url: "ReportsScreen",
+      icon: require("../assets/img/icon-report.png"),
+      type: "features",
     },
     // {
     //   name: 'channel presentations',
@@ -262,12 +259,12 @@ export default function DashboardScreen({ navigation }: Props) {
     //   icon: require('../assets/img/icon-quick-link-video.png'),
     // },
   ];
-  const width = orientation === 'PORTRAIT' ? portraitWidth : landscapeWidth;
+  const width = orientation === "PORTRAIT" ? portraitWidth : landscapeWidth;
   const reOrderTile = (pos: any, unordered?: any) => {
     let sortable: any[][] = [];
     Object.keys(pos).forEach((key) => {
       if (unordered) {
-        const ifExist = unordered.filter((tile) => {
+        const ifExist = unordered.filter((tile: any) => {
           return tile.id.toString() === key;
         });
         if (ifExist.length > 0) {
@@ -282,15 +279,15 @@ export default function DashboardScreen({ navigation }: Props) {
       return a[1] - b[1];
     });
     console.log(
-      '🚀 ~ file: DashboardScreen.tsx ~ line 272 ~ Object.keys ~ sortable',
-      sortable.length
+      "🚀 ~ file: DashboardScreen.tsx ~ line 272 ~ Object.keys ~ sortable",
+      sortable.length,
     );
 
     let tilePositions: {};
     for (let i = 0; i < sortable.length; i++) {
       console.log(
-        '🚀 ~ file: DashboardScreen.tsx ~ line 675 ~ sortable[i]',
-        sortable[i][1]
+        "🚀 ~ file: DashboardScreen.tsx ~ line 675 ~ sortable[i]",
+        sortable[i][1],
       );
       if (i === sortable[i][1]) {
         tilePositions = {
@@ -314,15 +311,15 @@ export default function DashboardScreen({ navigation }: Props) {
   // );
   const unorderedTiles = [...features, ...weightedFolders, ...rootFoldersDate];
   console.log(
-    '🚀 ~ file: DashboardScreen.tsx ~ line 274 ~ unorderedTiles',
-    unorderedTiles?.length
+    "🚀 ~ file: DashboardScreen.tsx ~ line 274 ~ unorderedTiles",
+    unorderedTiles?.length,
   );
   let tiles: any[] = [];
 
   if (tileOrder) {
     console.log(
-      '🚀 ~ file: DashboardScreen.tsx ~ line 277 ~ tileOrder',
-      tileOrder
+      "🚀 ~ file: DashboardScreen.tsx ~ line 277 ~ tileOrder",
+      tileOrder,
     );
 
     if (Object.keys(tileOrder).length > unorderedTiles.length) {
@@ -330,8 +327,8 @@ export default function DashboardScreen({ navigation }: Props) {
       dispatch(setOrder(tileOrder));
 
       console.log(
-        '🚀 ~ file: DashboardScreen.tsx ~ line 317 ~ reOrderTile',
-        tileOrder
+        "🚀 ~ file: DashboardScreen.tsx ~ line 317 ~ reOrderTile",
+        tileOrder,
       );
     }
 
@@ -342,8 +339,8 @@ export default function DashboardScreen({ navigation }: Props) {
         if (tile.id.toString() === key) {
           newTile = true;
           console.log(
-            '🚀 ~ file: DashboardScreen.tsx ~ line 283 ~ unorderedTiles.forEach ~ tileOrder[key]',
-            tileOrder[key]
+            "🚀 ~ file: DashboardScreen.tsx ~ line 283 ~ unorderedTiles.forEach ~ tileOrder[key]",
+            tileOrder[key],
           );
 
           tiles[tileOrder[key]] = tile;
@@ -351,8 +348,8 @@ export default function DashboardScreen({ navigation }: Props) {
       });
       if (!newTile) {
         console.log(
-          '🚀 ~ file: DashboardScreen.tsx ~ line 301 ~ unorderedTiles.forEach ~ Object.keys(tileOrder).length',
-          Object.keys(tileOrder).length
+          "🚀 ~ file: DashboardScreen.tsx ~ line 301 ~ unorderedTiles.forEach ~ Object.keys(tileOrder).length",
+          Object.keys(tileOrder).length,
         );
 
         tiles[Object.keys(tileOrder).length + newTileCount] = tile;
@@ -377,20 +374,20 @@ export default function DashboardScreen({ navigation }: Props) {
   }
 
   console.log(
-    '🚀 ~ file: DashboardScreen.tsx ~ line 226 ~ DashboardScreen ~ tiles',
-    tiles.length
+    "🚀 ~ file: DashboardScreen.tsx ~ line 226 ~ DashboardScreen ~ tiles",
+    tiles.length,
   );
 
   if (error) {
     console.log(
-      '🚀 ~ file: DashboardScreen.tsx ~ line 195 ~ DashboardScreen ~ error',
-      error
+      "🚀 ~ file: DashboardScreen.tsx ~ line 195 ~ DashboardScreen ~ error",
+      error,
     );
     return (
       <View style={ApplicationStyles.mainContainer}>
         <View style={styles.container}>
           <Text>
-            Error: {error?.error || error?.data?.message || 'unknown error'}
+            Error: {error?.error || error?.data?.message || "unknown error"}
           </Text>
           <View style={{ height: 20 }} />
           <MiniButton onPress={() => dispatch(resetUser())} text="Logout" />
@@ -399,18 +396,18 @@ export default function DashboardScreen({ navigation }: Props) {
     );
   }
 
-  if (isSearching && searchText !== '') {
+  if (isSearching && searchText !== "") {
     return (
       <View style={ApplicationStyles.mainContainer}>
         <SearchBar
           setSearchText={setSearchText}
           searchText={searchText}
           onClose={() => {
-            setSearchText('');
+            setSearchText("");
             setIsSearching(false);
           }}
           onPress={() => {
-            if (searchText !== '') {
+            if (searchText !== "") {
               setIsSearching(true);
 
               // navigation.navigate('SearchResultScreen', { searchText });
@@ -420,7 +417,7 @@ export default function DashboardScreen({ navigation }: Props) {
 
         <View style={styles.container}>
           <ScrollView
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
             refreshControl={
               <RefreshControl
                 refreshing={isFetching}
@@ -442,15 +439,15 @@ export default function DashboardScreen({ navigation }: Props) {
             <View style={styles.footer}>
               <View
                 style={{
-                  flexDirection: 'row',
-                  alignSelf: 'center',
+                  flexDirection: "row",
+                  alignSelf: "center",
                   // height: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  justifyContent: "center",
+                  alignItems: "center",
                   // margin: 20,
                   marginLeft: 10,
                   marginRight: 5,
-                  width: '50%',
+                  width: "50%",
                 }}
               >
                 <FontAwesome5
@@ -462,7 +459,7 @@ export default function DashboardScreen({ navigation }: Props) {
                   <Text
                     style={{
                       ...Fonts.style.text20,
-                      textAlign: 'left',
+                      textAlign: "left",
                       // color: Colors.swireRed,
                       marginLeft: 10,
                     }}
@@ -474,7 +471,7 @@ export default function DashboardScreen({ navigation }: Props) {
                       ...Fonts.style.text20,
                       color: Colors.swireSuperDarkGray,
                       marginLeft: 10,
-                      textAlign: 'left',
+                      textAlign: "left",
                     }}
                   >
                     {user?.displayName}
@@ -513,11 +510,11 @@ export default function DashboardScreen({ navigation }: Props) {
             <View style={styles.footer}>
               <View
                 style={{
-                  flexDirection: 'row',
-                  alignSelf: 'flex-start',
+                  flexDirection: "row",
+                  alignSelf: "flex-start",
                   // height: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  justifyContent: "center",
+                  alignItems: "center",
                   margin: 20,
                   marginLeft: 40,
                 }}
@@ -548,7 +545,7 @@ export default function DashboardScreen({ navigation }: Props) {
               </View>
               <View
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   right: 30,
                   // bottom: 20,
                 }}
@@ -588,11 +585,11 @@ export default function DashboardScreen({ navigation }: Props) {
         setSearchText={setSearchText}
         searchText={searchText}
         onClose={() => {
-          setSearchText('');
+          setSearchText("");
           setIsSearching(false);
         }}
         onPress={() => {
-          if (searchText !== '') {
+          if (searchText !== "") {
             setIsSearching(true);
 
             // navigation.navigate('SearchResultScreen', { searchText });
@@ -604,10 +601,10 @@ export default function DashboardScreen({ navigation }: Props) {
           <View
             style={{
               // borderWidth: 1,
-              justifyContent: 'center',
-              alignItems: 'flex-end',
-              display: 'flex',
-              width: '100%',
+              justifyContent: "center",
+              alignItems: "flex-end",
+              display: "flex",
+              width: "100%",
               paddingBottom: 10,
               // position: 'absolute',
               // top: 0,
@@ -642,7 +639,7 @@ export default function DashboardScreen({ navigation }: Props) {
           </View>
         )}
         <ScrollView
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
           refreshControl={
             <RefreshControl
               refreshing={isFetching}
@@ -666,7 +663,7 @@ export default function DashboardScreen({ navigation }: Props) {
             text="clear logs"
           ></MiniButton> */}
           {isDragging ? (
-            <View style={{ position: 'relative' }}>
+            <View style={{ position: "relative" }}>
               {/* <View
                 style={{
                   // borderWidth: 1,
@@ -718,10 +715,10 @@ export default function DashboardScreen({ navigation }: Props) {
               >
                 <SortableContainer
                   customconfig={{
-                    COL: orientation === 'LANDSCAPE' ? 5 : 4,
+                    COL: orientation === "LANDSCAPE" ? 5 : 4,
                     MARGIN: 10,
                     SIZE:
-                      (Dimensions.get('window').width * parseFloat(width)) /
+                      (Dimensions.get("window").width * parseFloat(width)) /
                         100 -
                       10,
                   }}
@@ -736,11 +733,11 @@ export default function DashboardScreen({ navigation }: Props) {
                     }}
                   >
                     {tiles.map((tile: any, index) => {
-                      if (tile?.type === 'features') {
+                      if (tile?.type === "features") {
                         return (
                           <SortableTile
                             onLongPress={() => {
-                              console.log('long press');
+                              console.log("long press");
                             }}
                             key={`feature_id_${tile.name}${tile.url}`}
                             id={tile.id}
@@ -752,44 +749,44 @@ export default function DashboardScreen({ navigation }: Props) {
                               width={width}
                               onLongPress={() => {
                                 console.log(
-                                  '🚀 ~ file: DashboardScreen.tsx ~ line 326 ~ {tiles.map ~ setIsDragging(true)'
+                                  "🚀 ~ file: DashboardScreen.tsx ~ line 326 ~ {tiles.map ~ setIsDragging(true)",
                                 );
                                 setIsDragging(true);
                               }}
                               onPress={() => {
-                                if (tile.name === 'channel presentations') {
+                                if (tile.name === "channel presentations") {
                                   console.log(
-                                    'entering channel presentations page'
+                                    "entering channel presentations page",
                                   );
-                                  navigation.navigate('FolderStackNavigation', {
-                                    screen: 'FolderScreen',
+                                  navigation.navigate("FolderStackNavigation", {
+                                    screen: "FolderScreen",
                                     params: {
                                       termID: weightedFolders[0].id,
                                       folderName: weightedFolders[0].name,
                                     },
                                   });
-                                } else if (tile.name === 'Freestyle') {
-                                  console.log('entering freestyle page');
+                                } else if (tile.name === "Freestyle") {
+                                  console.log("entering freestyle page");
 
-                                  navigation.navigate('FolderStackNavigation', {
-                                    screen: 'FolderScreen',
+                                  navigation.navigate("FolderStackNavigation", {
+                                    screen: "FolderScreen",
                                     params: {
                                       termID: weightedFolders[2].id,
                                       folderName: weightedFolders[2].name,
                                     },
                                   });
-                                } else if (tile.name === 'Testimonials') {
-                                  console.log('entering Testimonials page');
+                                } else if (tile.name === "Testimonials") {
+                                  console.log("entering Testimonials page");
 
-                                  navigation.navigate('FolderStackNavigation', {
-                                    screen: 'FolderScreen',
+                                  navigation.navigate("FolderStackNavigation", {
+                                    screen: "FolderScreen",
                                     params: {
                                       termID: weightedFolders[1].id,
                                       folderName: weightedFolders[1].name,
                                     },
                                   });
-                                } else if (tile.name === 'Sales Mockup') {
-                                  navigation.navigate('SalesMockupScreen', {
+                                } else if (tile.name === "Sales Mockup") {
+                                  navigation.navigate("SalesMockupScreen", {
                                     clear: new Date().valueOf(),
                                   });
                                 } else {
@@ -803,7 +800,7 @@ export default function DashboardScreen({ navigation }: Props) {
                       return (
                         <SortableTile
                           onLongPress={() => {
-                            console.log('long press');
+                            console.log("long press");
                           }}
                           key={`sortable_id_${tile.name}${tile.url}`}
                           id={tile.id}
@@ -814,8 +811,8 @@ export default function DashboardScreen({ navigation }: Props) {
                             width={width}
                             onPress={() => {
                               // Start Navigation in the FolderStack
-                              navigation.navigate('FolderStackNavigation', {
-                                screen: 'FolderScreen',
+                              navigation.navigate("FolderStackNavigation", {
+                                screen: "FolderScreen",
                                 params: {
                                   termID: tile.id,
                                   folderName: tile.name,
@@ -833,7 +830,7 @@ export default function DashboardScreen({ navigation }: Props) {
           ) : (
             <View style={styles.tileContainer}>
               {tiles.map((tile: any, index) => {
-                if (tile?.type === 'features') {
+                if (tile?.type === "features") {
                   return (
                     <FeatureTile
                       key={`feature2_id_${tile.name}${tile.url}`}
@@ -842,42 +839,42 @@ export default function DashboardScreen({ navigation }: Props) {
                       width={width}
                       onLongPress={() => {
                         console.log(
-                          '🚀 ~ file: DashboardScreen.tsx ~ line 326 ~ {tiles.map ~ setIsDragging(true)'
+                          "🚀 ~ file: DashboardScreen.tsx ~ line 326 ~ {tiles.map ~ setIsDragging(true)",
                         );
                         setIsDragging(true);
                       }}
                       onPress={() => {
-                        if (tile.name === 'channel presentations') {
-                          console.log('entering channel presentations page');
-                          navigation.navigate('FolderStackNavigation', {
-                            screen: 'FolderScreen',
+                        if (tile.name === "channel presentations") {
+                          console.log("entering channel presentations page");
+                          navigation.navigate("FolderStackNavigation", {
+                            screen: "FolderScreen",
                             params: {
                               termID: weightedFolders[0].id,
                               folderName: weightedFolders[0].name,
                             },
                           });
-                        } else if (tile.name === 'Freestyle') {
-                          console.log('entering freestyle page');
+                        } else if (tile.name === "Freestyle") {
+                          console.log("entering freestyle page");
 
-                          navigation.navigate('FolderStackNavigation', {
-                            screen: 'FolderScreen',
+                          navigation.navigate("FolderStackNavigation", {
+                            screen: "FolderScreen",
                             params: {
                               termID: weightedFolders[2].id,
                               folderName: weightedFolders[2].name,
                             },
                           });
-                        } else if (tile.name === 'Testimonials') {
-                          console.log('entering Testimonials page');
+                        } else if (tile.name === "Testimonials") {
+                          console.log("entering Testimonials page");
 
-                          navigation.navigate('FolderStackNavigation', {
-                            screen: 'FolderScreen',
+                          navigation.navigate("FolderStackNavigation", {
+                            screen: "FolderScreen",
                             params: {
                               termID: weightedFolders[1].id,
                               folderName: weightedFolders[1].name,
                             },
                           });
-                        } else if (tile.name === 'Sales Mockup') {
-                          navigation.navigate('SalesMockupScreen', {
+                        } else if (tile.name === "Sales Mockup") {
+                          navigation.navigate("SalesMockupScreen", {
                             clear: new Date().valueOf(),
                           });
                         } else {
@@ -894,14 +891,14 @@ export default function DashboardScreen({ navigation }: Props) {
                     width={width}
                     onLongPress={() => {
                       console.log(
-                        '🚀 ~ file: DashboardScreen.tsx ~ line 326 ~ {tiles.map ~ setIsDragging(true)'
+                        "🚀 ~ file: DashboardScreen.tsx ~ line 326 ~ {tiles.map ~ setIsDragging(true)",
                       );
                       setIsDragging(true);
                     }}
                     onPress={() => {
                       // Start Navigation in the FolderStack
-                      navigation.navigate('FolderStackNavigation', {
-                        screen: 'FolderScreen',
+                      navigation.navigate("FolderStackNavigation", {
+                        screen: "FolderScreen",
                         params: {
                           termID: tile.id,
                           folderName: tile.name,
@@ -918,15 +915,15 @@ export default function DashboardScreen({ navigation }: Props) {
           <View style={styles.footer}>
             <View
               style={{
-                flexDirection: 'row',
-                alignSelf: 'center',
+                flexDirection: "row",
+                alignSelf: "center",
                 // height: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
+                justifyContent: "center",
+                alignItems: "center",
                 // margin: 20,
                 marginLeft: 10,
                 marginRight: 5,
-                width: '50%',
+                width: "50%",
               }}
             >
               <FontAwesome5
@@ -938,7 +935,7 @@ export default function DashboardScreen({ navigation }: Props) {
                 <Text
                   style={{
                     ...Fonts.style.text20,
-                    textAlign: 'left',
+                    textAlign: "left",
                     // color: Colors.swireRed,
                     marginLeft: 10,
                   }}
@@ -950,7 +947,7 @@ export default function DashboardScreen({ navigation }: Props) {
                     ...Fonts.style.text20,
                     color: Colors.swireSuperDarkGray,
                     marginLeft: 10,
-                    textAlign: 'left',
+                    textAlign: "left",
                   }}
                 >
                   {user?.displayName}
@@ -989,11 +986,11 @@ export default function DashboardScreen({ navigation }: Props) {
           <View style={styles.footer}>
             <View
               style={{
-                flexDirection: 'row',
-                alignSelf: 'flex-start',
+                flexDirection: "row",
+                alignSelf: "flex-start",
                 // height: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
+                justifyContent: "center",
+                alignItems: "center",
                 margin: 20,
                 marginLeft: 40,
               }}
@@ -1024,7 +1021,7 @@ export default function DashboardScreen({ navigation }: Props) {
             </View>
             <View
               style={{
-                position: 'absolute',
+                position: "absolute",
                 right: 30,
                 // bottom: 20,
               }}
@@ -1062,29 +1059,29 @@ export default function DashboardScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: Colors.swireLightGray,
     paddingVertical: 10,
   },
   tileContainer: {
     flex: 1,
-    alignItems: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
     paddingBottom: 90,
-    display: 'flex',
+    display: "flex",
     // marginLeft: 20,
   },
 
   footer: {
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    width: '100%',
+    backgroundColor: "white",
+    flexDirection: "row",
+    width: "100%",
     height: 90,
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
-    alignItems: 'center',
+    alignItems: "center",
   },
   accountDetailsBtn: {
     backgroundColor: Colors.swireRed,
@@ -1092,25 +1089,25 @@ const styles = StyleSheet.create({
     marginRight: 30,
   },
   accountDetailsText: {
-    color: 'white',
+    color: "white",
     fontSize: 20,
   },
   greetingText: {
     fontSize: 20,
     color: Colors.swireDarkGray,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   tile: {
-    backgroundColor: 'green',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "green",
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 90,
   },
   text: {
     fontSize: 28,
-    color: 'blue',
-    fontWeight: 'bold',
+    color: "blue",
+    fontWeight: "bold",
   },
 });

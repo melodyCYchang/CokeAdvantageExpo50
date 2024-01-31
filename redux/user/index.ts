@@ -1,9 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { StrapiUser } from '../../types/StrapiUser';
-import { User } from '../../types/User';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { StrapiUser } from "../../types/StrapiUser";
 
 // eslint-disable-next-line import/no-cycle
-import { RootState } from '../store';
+import { RootState } from "../store";
 
 export interface UserState {
   user: StrapiUser | null;
@@ -14,7 +13,7 @@ const initialState: UserState = {
 };
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<StrapiUser | null>) => {

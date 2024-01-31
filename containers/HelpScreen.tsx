@@ -1,25 +1,23 @@
-import React from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { t } from "i18n-js";
+import React from "react";
 import {
+  Linking,
+  StatusBar,
   StyleSheet,
   Text,
-  View,
-  StatusBar,
-  Button,
   TouchableOpacity,
-  Linking,
-} from 'react-native';
-import { useDispatch } from 'react-redux';
-import { FontAwesome5, Ionicons } from '@expo/vector-icons';
-import { t } from 'i18n-js';
-import { ApplicationStyles, Fonts } from '../theme';
-import { RootStackParamList } from '../navigation/RootStackParamList';
-import { resetUser } from '../redux/user';
-import { callNumber } from '../components/PhoneCall';
+  View,
+} from "react-native";
+import { useDispatch } from "react-redux";
+import { callNumber } from "../components/PhoneCall";
+import { RootStackParamList } from "../navigation/RootStackParamList";
+import { ApplicationStyles, Fonts } from "../theme";
 
 type ReportsScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'HelpScreen'
+  "HelpScreen"
 >;
 
 type Props = {
@@ -27,30 +25,30 @@ type Props = {
 };
 
 export default function HelpScreen({ navigation }: Props) {
-  StatusBar.setBarStyle('light-content', true);
+  StatusBar.setBarStyle("light-content", true);
   const dispatch = useDispatch();
   return (
     <View style={ApplicationStyles.mainContainer}>
       <View style={styles.container}>
         <View
           style={{
-            flexDirection: 'column',
-            width: '100%',
-            alignItems: 'center',
+            flexDirection: "column",
+            width: "100%",
+            alignItems: "center",
           }}
         >
           <Text style={Fonts.style.title}>Please contact support</Text>
           <View
             style={{
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <TouchableOpacity
               style={styles.linkButton}
               onPress={() => {
-                callNumber('(801)816-5333');
+                callNumber("(801)816-5333");
               }}
             >
               <FontAwesome5 name="phone" size={24} color="white" />
@@ -59,32 +57,32 @@ export default function HelpScreen({ navigation }: Props) {
           </View>
           <Text
             style={{
-              alignSelf: 'center',
+              alignSelf: "center",
               fontSize: 20,
               fontFamily: Fonts.type.base,
               fontWeight: Fonts.weight.bold,
             }}
           >
-            {t('support.or')}
+            {t("support.or")}
           </Text>
           <View
             style={{
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
             <TouchableOpacity
               style={styles.linkButton}
               onPress={() =>
                 Linking.openURL(
-                  'mailto: operationalexcellencetechnology@swirecc.com'
+                  "mailto: operationalexcellencetechnology@swirecc.com",
                 )
               }
             >
-              <Ionicons name="md-paper-plane" size={24} color="white" />
+              <Ionicons name="paper-plane" size={24} color="white" />
               <Text style={styles.buttonText}>
-                {' '}
+                {" "}
                 operationalexcellencetechnology@swirecc.com
               </Text>
             </TouchableOpacity>
@@ -98,29 +96,29 @@ export default function HelpScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     // justifyContent: 'center',
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 50,
   },
   buttonText: {
     fontSize: 20,
-    textAlign: 'center',
-    color: 'white',
+    textAlign: "center",
+    color: "white",
     marginLeft: 7,
     fontFamily: Fonts.type.base,
   },
   linkButton: {
-    width: '95%',
+    width: "95%",
     // height: 38,
     marginTop: 20,
     marginBottom: 20,
     padding: 10,
-    backgroundColor: 'red',
+    backgroundColor: "red",
     borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
     fontFamily: Fonts.type.base,
   },
 });

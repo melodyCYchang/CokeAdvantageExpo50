@@ -1,43 +1,35 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import assert from 'assert';
-import { useSelector } from 'react-redux';
-import { API_BASE_URL, USE_PASSWORD_LOGIN } from '../config';
-import { CreateAccountPayload } from '../types/CreateAccountPayload';
-import {
-  DeleteMockup,
-  DeleteMockupPayload,
-} from '../types/DeleteMockupPayload';
-import { CreateMockupPayload } from '../types/CreateMockupPayload';
-import { ForgotPasswordPayload } from '../types/ForgotPasswordPayload';
-import { GetMockupsByUserPayload } from '../types/GetMockupsByUserPayload';
-import { IDPayload } from '../types/IDPayload';
-import { LoginPayload } from '../types/LoginPayload';
-import { Machine } from '../types/Machine';
-import { MachineType } from '../types/MachineType';
-import { Mockup } from '../types/Mockup';
-import { QuickLink, parseToQuickLink } from '../types/QuickLink';
-import { SuccessResponse } from '../types/SuccessResponse';
-import { UpdateMockupPayload } from '../types/UpdateMockupPayload';
-import { UploadMockupResponse } from '../types/UploadMockupResponse';
-import { User } from '../types/User';
-import { Presentation } from '../types/Presentation';
-import { PresentationFolder } from '../types/PresentationFolder';
-import { Testimonial } from '../types/Testimonial';
-import { StrapiLoginPayload } from '../types/StrapiLoginPayload';
-import { getUser } from '../redux/user';
-import { Folder } from '../types/Folder';
-import { RootState } from '../redux/store';
-import { MediaItem } from '../types/MediaItem';
-import { StrapiUser } from '../types/StrapiUser';
-import { UploadMockupPayload } from '../types/UploadMockupPayload';
-import getAccessToken from '../utils/getAccessToken';
-import { userPushTokensPayload } from '../types/userPushTokensPayload';
-import { Activity } from '../types/Activity';
-import { formatRFC3339 } from 'date-fns';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { formatRFC3339 } from "date-fns";
+import { API_BASE_URL, USE_PASSWORD_LOGIN } from "../config";
+import { RootState } from "../redux/store";
+import { Activity } from "../types/Activity";
+import { CreateAccountPayload } from "../types/CreateAccountPayload";
+import { CreateMockupPayload } from "../types/CreateMockupPayload";
+import { DeleteMockupPayload } from "../types/DeleteMockupPayload";
+import { Folder } from "../types/Folder";
+import { ForgotPasswordPayload } from "../types/ForgotPasswordPayload";
+import { GetMockupsByUserPayload } from "../types/GetMockupsByUserPayload";
+import { IDPayload } from "../types/IDPayload";
+import { LoginPayload } from "../types/LoginPayload";
+import { Machine } from "../types/Machine";
+import { MachineType } from "../types/MachineType";
+import { MediaItem } from "../types/MediaItem";
+import { Mockup } from "../types/Mockup";
+import { Presentation } from "../types/Presentation";
+import { PresentationFolder } from "../types/PresentationFolder";
+import { QuickLink, parseToQuickLink } from "../types/QuickLink";
+import { StrapiLoginPayload } from "../types/StrapiLoginPayload";
+import { StrapiUser } from "../types/StrapiUser";
+import { SuccessResponse } from "../types/SuccessResponse";
+import { Testimonial } from "../types/Testimonial";
+import { UpdateMockupPayload } from "../types/UpdateMockupPayload";
+import { UploadMockupPayload } from "../types/UploadMockupPayload";
+import { User } from "../types/user";
+import getAccessToken from "../utils/getAccessToken";
 
 // Define a service using a base URL and expected endpoints
 export const wpApi = createApi({
-  reducerPath: 'wpApi',
+  reducerPath: "wpApi",
   baseQuery: fetchBaseQuery({
     baseUrl: API_BASE_URL,
     prepareHeaders: async (headers, { getState }) => {
@@ -53,12 +45,12 @@ export const wpApi = createApi({
       // const user = useSelector(getUser);
 
       if (token) {
-        headers.set('authorization', `Bearer ${token}`);
+        headers.set("authorization", `Bearer ${token}`);
       }
       return headers;
     },
   }),
-  tagTypes: ['Mockup', 'Report', 'Activity'],
+  tagTypes: ["Mockup", "Report", "Activity"],
   refetchOnFocus: true,
   endpoints: (builder) => ({
     getQuickLinks: builder.query<Array<QuickLink>, void>({
@@ -74,7 +66,7 @@ export const wpApi = createApi({
       // note: an optional `queryFn` may be used in place of `query`
       query: (payload) => ({
         url: `user/login/`,
-        method: 'POST',
+        method: "POST",
         body: payload,
       }),
       // // Pick out data and prevent nested properties in a hook or selector
@@ -91,7 +83,7 @@ export const wpApi = createApi({
           token: response.data[0].appToken,
           email: response.data[0].data.user_email,
           displayName: response.data[0].data.display_name,
-          status: response.data[0].data.user_status === '1',
+          status: response.data[0].data.user_status === "1",
         };
 
         return user;
@@ -121,7 +113,7 @@ export const wpApi = createApi({
       // note: an optional `queryFn` may be used in place of `query`
       query: () => ({
         url: `users/me`,
-        method: 'GET',
+        method: "GET",
       }),
       // // Pick out data and prevent nested properties in a hook or selector
       transformResponse: (response: { data: any }) => {
@@ -131,7 +123,7 @@ export const wpApi = createApi({
         }
         // console.log("🚀 ~ file: wpApi.ts ~ line 110 ~ user", user)
 
-        const results: Array<StrapiUser> = response;
+        const results: StrapiUser = response as unknown as StrapiUser;
         return results;
       },
     }),
@@ -139,14 +131,14 @@ export const wpApi = createApi({
       // note: an optional `queryFn` may be used in place of `query`
       query: (payload) => ({
         url: `users/${payload.id}`,
-        method: 'PUT',
+        method: "PUT",
         body: payload,
       }),
       // // Pick out data and prevent nested properties in a hook or selector
       transformResponse: (response: { data: any }) => {
         console.log(
-          '🚀 ~ file: wpApi.ts ~ line 146 ~ response updatePushTokens',
-          response
+          "🚀 ~ file: wpApi.ts ~ line 146 ~ response updatePushTokens",
+          response,
         );
 
         if (response?.data?.errors?.[0]) {
@@ -159,7 +151,7 @@ export const wpApi = createApi({
       // note: an optional `queryFn` may be used in place of `query`
       query: (payload) => ({
         url: `auth/local`,
-        method: 'POST',
+        method: "POST",
         body: payload,
       }),
       // // Pick out data and prevent nested properties in a hook or selector
@@ -183,13 +175,13 @@ export const wpApi = createApi({
     getFoldersStrapi: builder.query<Array<Folder>, void>({
       query: () => ({
         url: `folders`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response: { data: any }) => {
         if (response?.data?.errors?.[0]) {
           throw new Error(response.data.errors[0]);
         }
-        const results: Array<Folder> = response;
+        const results: Array<Folder> = response as unknown as Array<Folder>;
         return results;
       },
     }),
@@ -197,13 +189,13 @@ export const wpApi = createApi({
     getFolderStrapi: builder.query<Folder, number>({
       query: (payload) => ({
         url: `folders/${payload}`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response: { data: any }) => {
         if (response?.data?.errors?.[0]) {
           throw new Error(response.data.errors[0]);
         }
-        const results: Folder = response;
+        const results: Folder = response as unknown as Folder;
         return results;
       },
     }),
@@ -217,13 +209,13 @@ export const wpApi = createApi({
 
       query: (payload) => ({
         url: `mockups`,
-        method: 'POST',
+        method: "POST",
         body: payload.form,
         // headers: {
         //   'content-type': 'multipart/form-data',
         // },
       }),
-      invalidatesTags: ['Mockup'],
+      invalidatesTags: ["Mockup"],
     }),
 
     createMockup: builder.mutation<
@@ -232,7 +224,7 @@ export const wpApi = createApi({
     >({
       query: (payload) => ({
         url: `mockups/save/`,
-        method: 'POST',
+        method: "POST",
         body: payload,
       }),
       // // Pick out data and prevent nested properties in a hook or selector
@@ -241,7 +233,7 @@ export const wpApi = createApi({
       //   return user;
       // },
 
-      invalidatesTags: ['Mockup'],
+      invalidatesTags: ["Mockup"],
       // // onQueryStarted is useful for optimistic updates
       // // The 2nd parameter is the destructured `MutationLifecycleApi`
       // async onQueryStarted(
@@ -271,17 +263,17 @@ export const wpApi = createApi({
 
       query: (payload) => ({
         url: `mockups/${payload.id}`,
-        method: 'PUT',
+        method: "PUT",
         body: payload.form,
       }),
-      invalidatesTags: ['Mockup'],
+      invalidatesTags: ["Mockup"],
     }),
 
     updateMockupName: builder.mutation<boolean, Partial<UpdateMockupPayload>>({
       // note: an optional `queryFn` may be used in place of `query`
       query: (payload) => ({
         url: `mockups/${payload.id}`,
-        method: 'PUT',
+        method: "PUT",
         body: payload,
       }),
       // // Pick out data and prevent nested properties in a hook or selector
@@ -295,14 +287,14 @@ export const wpApi = createApi({
         }
         return true;
       },
-      invalidatesTags: ['Mockup'],
+      invalidatesTags: ["Mockup"],
     }),
 
     createAccount: builder.mutation<boolean, Partial<CreateAccountPayload>>({
       // note: an optional `queryFn` may be used in place of `query`
       query: (payload) => ({
         url: `user/create/`,
-        method: 'POST',
+        method: "POST",
         body: payload,
       }),
       // // Pick out data and prevent nested properties in a hook or selector
@@ -342,7 +334,7 @@ export const wpApi = createApi({
       // note: an optional `queryFn` may be used in place of `query`
       query: (payload) => ({
         url: `user/forgotPassword/`,
-        method: 'POST',
+        method: "POST",
         body: payload,
       }),
       // // Pick out data and prevent nested properties in a hook or selector
@@ -385,7 +377,7 @@ export const wpApi = createApi({
       // note: an optional `queryFn` may be used in place of `query`
       query: (payload) => ({
         url: `mockups?owner.id=${payload.ID}&_sort=${payload.sort_by}:${payload.order}`,
-        method: 'GET',
+        method: "GET",
       }),
       // // Pick out data and prevent nested properties in a hook or selector
       transformResponse: (response: { data: any }) => {
@@ -395,7 +387,7 @@ export const wpApi = createApi({
           throw new Error(response.data.errors[0]);
         }
 
-        const results: Array<Mockup> = response;
+        const results: Array<Mockup> = response as unknown as Array<Mockup>;
         return results;
 
         // console.log('mockup data: ', response.data);
@@ -406,10 +398,10 @@ export const wpApi = createApi({
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.map(({ ID }) => ({ type: 'Mockup' as const, id: ID })),
-              'Mockup',
+              ...result.map(({ ID }) => ({ type: "Mockup" as const, id: ID })),
+              "Mockup",
             ]
-          : ['Mockup'],
+          : ["Mockup"],
       // invalidatesTags: ['Post'],
       // // onQueryStarted is useful for optimistic updates
       // // The 2nd parameter is the destructured `MutationLifecycleApi`
@@ -435,7 +427,7 @@ export const wpApi = createApi({
       // note: an optional `queryFn` may be used in place of `query`
       query: (payload) => ({
         url: `mockups/${payload.id}`,
-        method: 'GET',
+        method: "GET",
       }),
       // // Pick out data and prevent nested properties in a hook or selector
 
@@ -449,7 +441,7 @@ export const wpApi = createApi({
             throw new Error(response.data.errors[0]);
           }
 
-          const results: Mockup = response;
+          const results: Mockup = response as unknown as Mockup;
           // console.log(
           //   '🚀 ~ file: wpApi.ts ~ line 366 ~ Mockup',
           //   results.machine_positioning
@@ -457,7 +449,7 @@ export const wpApi = createApi({
 
           return results;
         } catch (err) {
-          console.log('🚀 ~ file: wpApi.ts ~ line 375 ~ err', err);
+          console.log("🚀 ~ file: wpApi.ts ~ line 375 ~ err", err);
         }
 
         // console.log('mockup data: ', response.data);
@@ -467,8 +459,8 @@ export const wpApi = createApi({
       // providesTags: ['Mockup'],
       providesTags: (result, error, arg) =>
         result
-          ? [{ type: 'Mockup' as const, id: result.ID }, 'Mockup']
-          : ['Mockup'],
+          ? [{ type: "Mockup" as const, id: result.ID }, "Mockup"]
+          : ["Mockup"],
       // invalidatesTags: ['Post'],
       // // onQueryStarted is useful for optimistic updates
       // // The 2nd parameter is the destructured `MutationLifecycleApi`
@@ -496,12 +488,12 @@ export const wpApi = createApi({
 
       // // Pick out data and prevent nested properties in a hook or selector
       transformResponse: (response: { data: any }) => {
-        console.log('🚀 ~ file: wpApi.ts ~ line 26 ~ esponse.data', response);
+        console.log("🚀 ~ file: wpApi.ts ~ line 26 ~ esponse.data", response);
         if (response?.data?.errors?.[0]) {
           throw new Error(response.data.errors[0]);
         }
 
-        const results: Array<Machine> = response;
+        const results: Array<Machine> = response as unknown as Array<Machine>;
         return results;
       },
     }),
@@ -527,7 +519,7 @@ export const wpApi = createApi({
       // note: an optional `queryFn` may be used in place of `query`
       query: (payload) => ({
         url: `mockups/${payload.post_id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
       // // Pick out data and prevent nested properties in a hook or selector
       transformResponse: (response: { data: any }) => {
@@ -541,7 +533,7 @@ export const wpApi = createApi({
 
         return true;
       },
-      invalidatesTags: ['Mockup'],
+      invalidatesTags: ["Mockup"],
     }),
     getAllPresentations: builder.query<Array<Presentation>, void>({
       // note: an optional `queryFn` may be used in place of `query`
@@ -564,15 +556,15 @@ export const wpApi = createApi({
     getPresentationsByFolder: builder.query<Array<Presentation>, string>({
       // note: an optional `queryFn` may be used in place of `query`
       query: (param) => {
-        console.log('get pres by folder param; ', param);
+        console.log("get pres by folder param; ", param);
         return `appquicklinks/getPresentationsByFolder/${param}`;
       },
 
       // // Pick out data and prevent nested properties in a hook or selector
       transformResponse: (response: { data: any }) => {
         console.log(
-          '🚀 ~ file: wpApi.ts ~ line 26 ~ esponse.data',
-          response.data
+          "🚀 ~ file: wpApi.ts ~ line 26 ~ esponse.data",
+          response.data,
         );
         if (response?.data?.errors?.[0]) {
           throw new Error(response.data.errors[0]);
@@ -650,29 +642,29 @@ export const wpApi = createApi({
           throw new Error(response.data.errors[0]);
         }
 
-        const results: Array<MediaItem> = response;
+        const results = response as unknown as Array<MediaItem>;
         return results;
       },
     }),
     getActivities: builder.query<Array<Activity>, void>({
       query: () => `activities?_limit=20&_sort=created_at:DESC`,
-      providesTags: ['Activity'],
+      providesTags: ["Activity"],
       transformResponse: (response: { data: any }) => {
-        console.log('🚀 ~ file: wpApi.ts ~ line 662 ~ data', response);
+        console.log("🚀 ~ file: wpApi.ts ~ line 662 ~ data", response);
         if (response?.data?.errors?.[0]) {
           throw new Error(response.data.errors[0]);
         }
-        const results: Array<Activity> = response;
+        const results: Array<Activity> = response as unknown as Array<Activity>;
         return results;
       },
     }),
     getUnreadActivitiesCount: builder.query<number, number>({
       query: (lastReadTimestamp: number) =>
         `/activities/count?created_at_gte=${formatRFC3339(
-          new Date(lastReadTimestamp)
+          new Date(lastReadTimestamp),
         )}`,
       transformResponse: (response: { data: any }) => {
-        console.log('🚀 ~ file: wpApi.ts ~ line 662 ~ data', response);
+        console.log("🚀 ~ file: wpApi.ts ~ line 662 ~ data", response);
         // if (response?.data?.errors?.[0]) {
         //   throw new Error(response.data.errors[0]);
         // }

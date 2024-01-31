@@ -1,13 +1,4 @@
-import {
-  isAfter,
-  isBefore,
-  parse,
-  parseJSON,
-  isEqual,
-  subDays,
-  addDays,
-} from 'date-fns';
-import { Folder } from '../types/Folder';
+import { addDays, isAfter, isBefore, parse } from "date-fns";
 
 const checkDate = (ele: any) => {
   const datenow = new Date();
@@ -18,23 +9,23 @@ const checkDate = (ele: any) => {
   // );
 
   if (ele?.startDate && ele?.endDate) {
-    const start = parse(ele?.startDate.toString(), 'yyyy-MM-dd', new Date());
+    const start = parse(ele?.startDate.toString(), "yyyy-MM-dd", new Date());
     const end = addDays(
-      parse(ele?.endDate.toString(), 'yyyy-MM-dd', new Date()),
-      1
+      parse(ele?.endDate.toString(), "yyyy-MM-dd", new Date()),
+      1,
     );
 
     return isAfter(datenow, start) && isBefore(datenow, end);
   }
   if (ele?.startDate) {
-    const start = parse(ele?.startDate.toString(), 'yyyy-MM-dd', new Date());
+    const start = parse(ele?.startDate.toString(), "yyyy-MM-dd", new Date());
 
     return isAfter(datenow, start);
   }
   if (ele?.endDate) {
     const end = addDays(
-      parse(ele?.endDate.toString(), 'yyyy-MM-dd', new Date()),
-      1
+      parse(ele?.endDate.toString(), "yyyy-MM-dd", new Date()),
+      1,
     );
 
     return isBefore(datenow, end);
@@ -43,9 +34,12 @@ const checkDate = (ele: any) => {
 };
 export const getCanShowItems = (
   obj: any[],
-  userEmail: string,
-  location?: string
+  userEmail?: string,
+  location?: string,
 ): any[] => {
+  if (!userEmail) {
+    return [];
+  }
   const filtered = obj?.filter((ele) => {
     // console.log(
     //   '🚀 ~ file: getCanShowItems.ts ~ line 34 ~ filtered ~ ele',

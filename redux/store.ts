@@ -1,30 +1,30 @@
-import { combineReducers } from 'redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
-import { setupListeners } from '@reduxjs/toolkit/query';
-import { useDispatch } from 'react-redux';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { configureStore } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/query";
+import { useDispatch } from "react-redux";
+import { combineReducers } from "redux";
+import { persistReducer, persistStore } from "redux-persist";
 
-import { wpApi } from '../services/wpApi';
+import { wpApi } from "../services/wpApi";
 
 // eslint-disable-next-line import/no-cycle
-import userReducer from './user';
-import countReducer from './count';
-import loginReducer from './login';
-import downloadsReducer from './downloads';
-import dashboardReducer from './dashboard';
-import persistReducerData from './persist';
-import activitiesReducer from './activities';
+import activitiesReducer from "./activities";
+import countReducer from "./count";
+import dashboardReducer from "./dashboard";
+import downloadsReducer from "./downloads";
+import loginReducer from "./login";
+import persistReducerData from "./persist";
+import userReducer from "./user";
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage: AsyncStorage,
   whitelist: [
     // 'user',
     // 'login',
-    'downloads',
-    'dashboard',
-    'persist',
+    "downloads",
+    "dashboard",
+    "persist",
   ],
 };
 
@@ -51,7 +51,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST'],
+        ignoredActions: ["persist/PERSIST"],
       },
     }).concat(wpApi.middleware),
 });

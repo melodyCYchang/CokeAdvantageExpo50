@@ -1,16 +1,7 @@
-import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  Button,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import { Colors } from '../theme';
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { Colors } from "../theme";
 
 export default function SearchBar({
   onPress,
@@ -28,22 +19,22 @@ export default function SearchBar({
       <View
         style={{
           borderColor: Colors.swireDarkGray,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '65%',
-          height: '100%',
-          position: 'relative',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "65%",
+          height: "100%",
+          position: "relative",
         }}
       >
         <TextInput
           style={{
             borderWidth: 1,
             borderColor: Colors.swireDarkGray,
-            width: '100%',
+            width: "100%",
             padding: 10,
             fontSize: 15,
-            textAlign: 'center',
+            textAlign: "center",
             margin: 10,
           }}
           onChangeText={setSearchText}
@@ -53,7 +44,7 @@ export default function SearchBar({
           onSubmitEditing={onPress}
         />
         <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-          <Ionicons name="ios-close-circle" size={24} color="#707070" />
+          <Ionicons name="close-circle" size={24} color="#707070" />
         </TouchableOpacity>
         <TouchableOpacity onPress={onPress}>
           <FontAwesome name="search" size={24} color={Colors.swireDarkGray} />
@@ -67,15 +58,15 @@ const styles = StyleSheet.create({
   container: {
     // padding: 10,
     height: 100,
-    width: '100%',
+    width: "100%",
     // paddingHorizontal: 30,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: Colors.white,
   },
   closeButton: {
-    position: 'absolute',
+    position: "absolute",
     right: 15,
   },
 });

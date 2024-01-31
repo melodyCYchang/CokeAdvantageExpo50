@@ -282,7 +282,7 @@ export default function LoginScreen({ navigation }: Props) {
                   )
                 }
               >
-                <Ionicons name="md-paper-plane" size={24} color="white" />
+                <Ionicons name="paper-plane" size={24} color="white" />
                 <Text style={styles.buttonText}>
                   operationalexcellencetechnology@swirecc.com
                 </Text>
