@@ -153,11 +153,7 @@ export default function ActivitiesScreen({ navigation }: Props) {
                 key={`activities_${activity.id}`}
                 style={{ ...styles.activityTile, ...styles.shadow }}
                 onPress={() => {
-                  if (activity.folder) {
-                    // console.log(
-                    //   '🚀 ~ file: ActivitiesScreen.tsx ~ line 93 ~ activities.map ~ activity.folder',
-                    //   activity.folder
-                    // );
+                  if (activity.folder && activity.folder.id) {
                     navigation.navigate("FolderStackNavigation", {
                       screen: "FolderScreen",
                       params: {
