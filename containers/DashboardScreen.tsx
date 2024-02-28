@@ -283,7 +283,7 @@ export default function DashboardScreen({ navigation }: Props) {
       sortable.length,
     );
 
-    let tilePositions: {};
+    let tilePositions: {} = {};
     for (let i = 0; i < sortable.length; i++) {
       console.log(
         "🚀 ~ file: DashboardScreen.tsx ~ line 675 ~ sortable[i]",
@@ -304,7 +304,7 @@ export default function DashboardScreen({ navigation }: Props) {
     return tilePositions;
   };
   let tileOrder = useSelector(getOrder);
-  const [savedPosition, setSavedPosition] = useState(null);
+  const [savedPosition, setSavedPosition] = useState<object | null>(null);
   // console.log(
   //   '🚀 ~ file: DashboardScreen.tsx ~ line 228 ~ DashboardScreen ~ tileOrder',
   //   tileOrder

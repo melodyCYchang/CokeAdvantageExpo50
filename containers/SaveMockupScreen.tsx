@@ -90,102 +90,11 @@ export default function SaveMockupScreen({ route, navigation }: Props) {
           "🚀 ~ file: SaveMockupScreen.tsx ~ line 74 ~ handleSaveImage ~ results",
           results,
         );
-
-        // console.log(
-        //   '🚀 ~ file: SaveMockupScreen.tsx ~ line 73 ~ handleSaveImage ~ results',
-        //   results
-        // );
-
-        // console.log(
-        //   '🚀 ~ file: SaveMockupScreen.tsx ~ line 74 ~ delete mockup ~ results',
-        //   mockup
-        // );
-
-        // if (mockup) {
-        //   // since we can't update the picture of a mockup we are creating a new one and deleting the old one
-
-        //   const data: any = await deleteMockup({
-        //     post_id: mockup.ID,
-        //   });
-        //   // TODO: make sure cache updated removing deleted item
-
-        //   const createResults = await dispatch(
-        //     wpApi.endpoints.getMockupsByUser.initiate({ ID: user?.id })
-        //     // { track: true }
-        //   );
-        //   console.log(
-        //     '🚀 ~ file: SaveMockupScreen.tsx ~ line 92 ~ handleSaveImage ~ createResults',
-        //     createResults
-        //   );
-        // }
         if (results?.data?.id) {
           setSaving(false);
           setRedirectPopup(true);
         }
-
-        // TODO: Add go to gallery screen popup
-
-        // const { width, height } = await getImageDimentions(imageUri);
-        // const resize: { width?: number; height?: number } =
-        //   width > height ? { width: 1024 } : { height: 1024 };
-
-        // const manipResult = await manipulateAsync(imageUri, [{ resize }], {
-        //   compress: 1,
-        //   format: SaveFormat.JPEG,
-        // });
-        // console.log(
-        //   '🚀 ~ file: uploadMockupAsync.ts ~ line 21 ~ //Image.getSize ~ manipResult',
-        //   manipResult
-        // );
-
-        // const uploadPayload = new FormData();
-
-        // uploadPayload.append('user_id', user?.id);
-        // uploadPayload.append('user_email', user.email);
-        // uploadPayload.append('image_width', manipResult.width);
-        // uploadPayload.append('image_height', manipResult.height);
-        // uploadPayload.append('machine_positioning', '[]');
-        // // const filename = imageUri.split('/').pop();
-        // // uploadPayload.append('post', {
-        // //   uri: manipResult.uri,
-        // //   name: filename,
-        // //   type: 'image/jpg',
-        // // });
-
-        // // Call Hook
-        // const data: any = await uploadMockup(uploadPayload);
-
-        // console.log('🚀 uploadPayload', uploadPayload);
-        // // console.log(
-        // //   '🚀 uploadPayload getHeaders',
-        // //   uploadPayload.getHeaders()
-        // // );
-        // // const a = await fetch('https://swiretoolkit.com/api/mockups/upload/', {
-        // //   // headers: {
-        // //   //   'Content-Type': 'multipart/form-data',
-        // //   //   Accept: 'application/json',
-        // //   //   // Accept: '*/*',
-        // //   // },
-        // //   method: 'POST',
-        // //   body: uploadPayload,
-        // // });
-        // // console.log('1AAAA', typeof imageUri);
-        // // console.log('2AAAA', a);
-        // // console.log('3AAAA');
-        // // console.log('4AAAA');
-        // // console.log('🚀 a', a);
-        // // const b = await a.json();
-        // // console.log('🚀 b', b);
-
-        // const uploadResults: any = await uploadMockup(uploadPayload);
-
-        // console.log(
-        //   '🚀 ~ file: SaveMockupScreen.tsx ~ line 76 ~ Image.getSize ~ uploadResults',
-        //   uploadResults
-        // );
-        // this.setState({ width, height });
-        // });
-      } catch (err) {
+      } catch (err: any) {
         console.log(`upload error ${err.message}`);
       }
     }

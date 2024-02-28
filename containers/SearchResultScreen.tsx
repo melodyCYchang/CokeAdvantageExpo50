@@ -118,6 +118,7 @@ export default function SearchResultScreen({ route, navigation }: Props) {
               setSearchText={setInputText}
               searchText={inputText}
               onPress={undefined}
+              onClose={undefined}
             />
           </View>
           <TouchableOpacity

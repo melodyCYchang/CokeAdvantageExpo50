@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
   Alert,
@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { useSelector } from "react-redux";
 
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "~/navigation/RootStackParamList";
 import { useAppDispatch } from "~/redux/store";
 import pdfLogo from "../assets/img/icon-quick-link-file.png";
 import vidLogo from "../assets/img/icon-quick-link-video.png";
@@ -37,7 +39,9 @@ export default function FilesTile({
 }) {
   const height = (Dimensions.get("window").width * parseFloat(width)) / 100;
 
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
   const dispatch = useAppDispatch();
   const downloadedFiles: any = useSelector(getDownloads);
   // console.log(
