@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { formatRFC3339 } from "date-fns";
+import { NewMockup } from "~/types/NewMockup";
 import { API_BASE_URL, USE_PASSWORD_LOGIN } from "../config";
 import { RootState } from "../redux/store";
 import { Activity } from "../types/Activity";
@@ -423,7 +424,7 @@ export const wpApi = createApi({
       //   }
       // ) {},
     }),
-    getMockupByID: builder.query<Mockup, Partial<IDPayload>>({
+    getMockupByID: builder.query<NewMockup, Partial<IDPayload>>({
       // note: an optional `queryFn` may be used in place of `query`
       query: (payload) => ({
         url: `mockups/${payload.id}`,
@@ -441,11 +442,8 @@ export const wpApi = createApi({
             throw new Error(response.data.errors[0]);
           }
 
-          const results: Mockup = response as unknown as Mockup;
-          // console.log(
-          //   '🚀 ~ file: wpApi.ts ~ line 366 ~ Mockup',
-          //   results.machine_positioning
-          // );
+          const results: NewMockup = response as unknown as NewMockup;
+          console.log("🚀 ~ file: wpApi.ts ~ line 366 ~ Mockup", results);
 
           return results;
         } catch (err) {

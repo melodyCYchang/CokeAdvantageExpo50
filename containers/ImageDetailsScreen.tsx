@@ -39,6 +39,7 @@ export default function ImageDetailsScreen({ route, navigation }: Props) {
       id: imageSource?.id,
     },
   );
+  console.log("🚀 ~ ImageDetailsScreen ~ data:", data?.image?.formats?.medium);
 
   const aspectRatio = (width: any, height: any) => {
     if (width && height) {
